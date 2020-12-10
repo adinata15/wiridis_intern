@@ -55,6 +55,8 @@ Like other programming style guides, the issues covered span not only aesthetic 
 conventions or coding standards as well. However, this document focuses primarily on the hard-and-fast rules 
 that we follow universally, and avoids giving advice that isn't clearly enforceable (whether by human or tool).
 
+[say use es6, will polyfill with Babel, taken from Google Coding Standard+ link, what is changed(why yes/not-preliminary), fix link names with :, change the comment to choose one type // or /* for multiline, remove the ?? on the links, eslint file coding, add emojis + color]
+
 ### General guide
 
 Quick guide to Javascript coding standard:
@@ -93,6 +95,15 @@ if (someVeryLongCondition())
   doSomething();
 
 for (let i = 0; i < foo.length; i++) bar(foo[i]);
+```
+
+**Good** example:
+```
+if (someVeryLongCondition())
+  doSomething();
+
+for (let i = 0; i < foo.length; i++)
+  bar(foo[i]);
 ```
 #### Nonempty blocks
 Braces follow the Kernighan and Ritchie style (Egyptian brackets) for nonempty blocks and block-like constructs:
@@ -195,10 +206,12 @@ Beyond where required by the language or other style rules, and apart from liter
 #### Function whitespace
 Prefer to put all function arguments on the same line as the function name. If doing so would exceed the 80-column limit, the arguments must be line-wrapped in a readable way. To save space, you may wrap as close to 80 as possible, or put each argument on its own line to enhance readability. Indentation should be four spaces. Aligning to the parenthesis is allowed, but discouraged. Below are the most common patterns for argument wrapping:
 ```
-// Arguments start on a new line, indented four spaces. Preferred when the
-// arguments don't fit on the same line with the function name (or the keyword
-// "function") but fit entirely on the second line. Works with very long
-// function names, survives renaming without reindenting, low on space.
+/* 
+*  Arguments start on a new line, indented four spaces. Preferred when the
+*  arguments don't fit on the same line with the function name (or the keyword
+*  "function") but fit entirely on the second line. Works with very long
+*  function names, survives renaming without reindenting, low on space.
+*/
 doSomething(
     descriptiveArgumentOne, descriptiveArgumentTwo, descriptiveArgumentThree) {
   // …
@@ -226,16 +239,13 @@ doSomething(
 This section addresses implementation comments. JSDoc is addressed separately in [`Javascript Doc`](#javascript-doc).
 
 #### Block comment style
-Block comments are indented at the same level as the surrounding code. They may be in `/* … */` or `//`-style. For multi-line `/* … */` comments, subsequent lines must start with `*` aligned with the `*` on the previous line, to make comments obvious with no extra context.
+Block comments are indented at the same level as the surrounding code. They may be in `/* … */` or `//`-style. For multi-line `/* … */` comments, subsequent lines must start with `*` aligned with the `*` on the previous line, to make comments obvious with no extra context. (pick one only)
 
 ```
 /*
  * This is
  * okay.
  */
-
-// And so
-// is this.
 
 /* This is fine, too. */
 ```
@@ -344,7 +354,7 @@ Destructuring may also be used for function parameters (note that a parameter na
     function optionalDestructuring([a = 4, b = 2] = []) { … };
     
 
-Negative example:
+**Bad** example:
 
     function badDestructuring([a, b] = [4, 2]) { … };
     
