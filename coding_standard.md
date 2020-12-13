@@ -30,14 +30,14 @@
 - [Naming](#naming)
     * [`Rules common to all identifiers`](#rules-common-to-all-identifiers)
     * [`Rules by identifier type`](#rules-by-identifier-type)
-    * [`Camel case: defined`](#camel-case:-defined)
+    * [`Camel case: defined`](#camel-case-defined)
 - [Javascript Doc](#javascript-doc)
     * [`General form`](#General-form)
     * [`Markdown`](#markdown)
     * [`JSDoc tags`](#jsdoc-tags)
     * [`Line wrapping`](#line-wrapping)
-    * [`Top/file-level comments`](#Top/file-level-comments)
-    * [`Class comments`](#Class-comments)
+    * [`Top/file-level comments`](#topfile-level-comments)
+    * [`Class comments`](#class-comments)
     * [`Enum and typedef comments`](#enum-and-typedef-comments)
     * [`Method and function comments`](#method-and-function-comments)
     * [`Property comments`](#property-comments)
@@ -48,7 +48,8 @@
     * [`Prettier`](#prettier)
 
 ## Preliminaries
-This document serves as the complete definition of Wiridis’s coding standards for source code in the JavaScript programming language. 
+This document serves as the complete definition of Wiridis’s coding standards for source code in the JavaScript programming language. This coding standard is based on Google Javascript Style Guide(#https://google.github.io/styleguide/jsguide.html#terminology-notes) with exclusion of irrelevant rules, such as `googl.module`, that is not applicable to Wiridis' standard. This guide will be based on ES6 or ECMAScript 2015. 
+
 A JavaScript source file is described as being in Wiridis style if and only if it adheres to the rules herein.
 
 Like other programming style guides, the issues covered span not only aesthetic issues of formatting, but other types of 
@@ -740,7 +741,7 @@ Example:
     }
     
 
-Use default parameters sparingly. Prefer destructuring (as in [??](#features-objects-destructuring)) to create readable APIs when there are more than a small handful of optional parameters that do not have a natural order.
+Use default parameters sparingly. Prefer destructuring (as in [Destructuring](#destructuring)) to create readable APIs when there are more than a small handful of optional parameters that do not have a natural order.
 
 Note: Unlike Python's default parameters, it is okay to use initializers that return new mutable objects (such as `{}` or `[]`) because the initializer is evaluated each time the default value is used, so a single object won't be shared across invocations.
 
@@ -824,7 +825,7 @@ Numbers may be specified in decimal, hex, octal, or binary. Use exactly `0x`, `0
 
 With ES6, the language now has three different kinds of `for` loops. All may be used, though `for`\-`of` loops should be preferred when possible.
 
-`for`\-`in` loops may only be used on dict-style objects (see [??](#features-objects-mixing-keys)), and should not be used to iterate over an array. `Object.prototype.hasOwnProperty` should be used in `for`\-`in` loops to exclude unwanted prototype properties. Prefer `for`\-`of` and `Object.keys` over `for`\-`in` when possible.
+`for`\-`in` loops may only be used on dict-style objects (see [Do not mix quoted and unquoted keys](#do-not-mix-quoted-and-unquoted-keys)), and should not be used to iterate over an array. `Object.prototype.hasOwnProperty` should be used in `for`\-`in` loops to exclude unwanted prototype properties. Prefer `for`\-`of` and `Object.keys` over `for`\-`in` when possible.
 
 #### Exceptions
 
@@ -1192,7 +1193,7 @@ Instead, write a Markdown list:
 
 ### JSDoc tags
 
-Google style allows a subset of JSDoc tags. See [??](#appendices-jsdoc-tag-reference) for the complete list. Most tags must occupy their own line, with the tag at the beginning of the line.
+This style allows a subset of JSDoc tags. See [JSDoc tag reference](#jsdoc-tag-reference) for the complete list. Most tags must occupy their own line, with the tag at the beginning of the line.
 
 Disallowed:
 
@@ -1385,7 +1386,7 @@ In anonymous functions annotations are generally optional. If the automatic type
         });
     
 
-For function type expressions, see [??](#jsdoc-function-types).
+For function type expressions, see [Function Type Expressions](#function-type-expressions).
 
 ### Property comments
 
@@ -1490,7 +1491,7 @@ Cases when template parameters should not be used:
 
 **Terminology Note**: _function type expression_ refers to a type annotation for function types with the keyword `function` in the annotation (see examples below).
 
-Where the function definition is given, do not use a function type expression. Specify parameter and return types with `@param` and `@return`, or with inline annotations (see [??](#jsdoc-method-and-function-comments)). This includes anonymous functions and functions defined and assigned to a const (where the function jsdoc appears above the whole assignment expression).
+Where the function definition is given, do not use a function type expression. Specify parameter and return types with `@param` and `@return`, or with inline annotations (see [Method and function comments](#method-and-function-comments)). This includes anonymous functions and functions defined and assigned to a const (where the function jsdoc appears above the whole assignment expression).
 
 Function type expressions are needed, for example, inside `@typedef`, `@param` or `@return`. Use it also for variables or properties of function type, if they are not immediately initialized with the function definition.
 
@@ -1523,7 +1524,7 @@ Good:
 
 #### Whitespace
 
-Within a type annotation, a single space or line break is required after each comma or colon. Additional line breaks may be inserted to improve readability or avoid exceeding the column limit. These breaks should be chosen and indented following the applicable guidelines (e.g. [??](#formatting-line-wrapping) and [??](#formatting-block-indentation)). No other whitespace is allowed in type annotations.
+Within a type annotation, a single space or line break is required after each comma or colon. Additional line breaks may be inserted to improve readability or avoid exceeding the column limit. These breaks should be chosen and indented following the applicable guidelines (e.g. [Line Wrapping](#line-wrapping) and [Block Indentation](#block-indentation)). No other whitespace is allowed in type annotations.
 
 Good:
 
