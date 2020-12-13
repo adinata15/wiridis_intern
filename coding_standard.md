@@ -16,11 +16,11 @@
     * [`Whitespace`](#whitespace)  
     * [`Comments`](#comments)  
 - [Language features](#language-features)
-    * [`Local variable declarations`](#local-variable-declaration)
+    * [`Local variables`](#local-variables)
     * [`Array literals`](#array-literals)     
     * [`Object literals`](#object-literals)
     * [`Classes`](#classes)
-    * [`Functions`](#funstions)
+    * [`Functions`](#functions)
     * [`String literals`](#string-literals)
     * [`Number literals`](#number-literals)
     * [`Control structures`](#control-structures)
@@ -32,7 +32,7 @@
     * [`Rules by identifier type`](#rules-by-identifier-type)
     * [`Camel case: defined`](#camel-case-defined)
 - [JSDoc](#jsdoc)
-    * [`General form`](#General-form)
+    * [`General form`](#general-form)
     * [`Markdown`](#markdown)
     * [`JSDoc tags`](#jsdoc-tags)
     * [`Line wrapping`](#line-wrapping)
@@ -47,7 +47,9 @@
     * [`Issues unspecified by Wiridis Style: Be Consistent!`](#issues-unspecified-by-wiridis-style-be-consistent)
     * [`Compiler warnings`](#compiler-warnings)
     * [`Deprecation`](#deprecation)
-- [Linters setup](#linters-setup)
+- [Software setup](#software-setup)
+    * [`Linters setup`](#linters-setup)
+    * [`Babel`](#babel)
 
 ## Preliminaries
 This document serves as the complete definition of Wiridis’s coding standards for source code in the JavaScript programming language. This coding standard is based on [Google Javascript Style Guide](https://google.github.io/styleguide/jsguide.html#terminology-notes) with exclusion of irrelevant rules, such as `googl.module`, which are not applicable to Wiridis' standard. 
@@ -55,15 +57,13 @@ This document serves as the complete definition of Wiridis’s coding standards 
 The following are parts in Wiridis that defer from Google Style Guide:
 - [`Comments`](#comments)
 
-This guide will be based on ES6 or ECMAScript 2015. 
+This guide will be based on ES6 or ECMAScript 2015. In this coding standard, `Babel` is used to polyfill the used codes to ensure code compatibility to older browser types.
 
 A JavaScript source file is described as being in Wiridis style if and only if it adheres to the rules herein.
 
 Like other programming style guides, the issues covered span not only aesthetic issues of formatting, but other types of 
 conventions or coding standards as well. However, this document focuses primarily on the hard-and-fast rules 
 that we follow universally, and avoids giving advice that isn't clearly enforceable (whether by human or tool).
-
-[say use es6, will polyfill with Babel, taken from Google Coding Standard+ link, what is changed(why yes/not-preliminary), eslint file coding, add emojis + color]
 
 ### General guide
 
@@ -1613,7 +1613,8 @@ Even a large number of suppressions in a class is still better than blinding the
 
 Mark deprecated methods, classes or interfaces with `@deprecated` annotations. A deprecation comment must include simple, clear directions for people to fix their call sites.
 
-## Linters setup
+## Software setup
+### Linters setup
 These are some tools that can make our life easier regarding the coding standards :smiley:.
 
 To fit the Wiridis coding standard, we can iinstall linters and configure VSCode as shown below:
@@ -1636,7 +1637,7 @@ Remaining modules are for configuration so that all our linters works as expecte
    ```
 
 2. Create a `.eslintrc.json` configuration file
-Create a configuration file for ESLint with the following contents:
+Create a configuration file for Prettier with the following contents:
    ```
    {
      "env": {
@@ -1674,7 +1675,38 @@ Create a configuration file for ESLint with the following contents:
    ```
 4. Set Prettier to format on Save (optional)
 You can set Prettier to format your file on each save. Open the Settings pane (`Ctrl + ,` or `Cmd + ,`), search for "Format" in the search field and check the box that says “Editor: Format on Save”.
-![VSCode settings image](format%20on%20save%20pic.PNG)
+![VSCode settings image](format%20on%20save%20pic.png)
 
-We are good to go :smiley:. However, note that these Linters can only warn and format our code to a certain extend. We need to remain concious in ensuring our code adhere to the coding standards explained in this document.
+### Babel
+To ensure code compatibility with older browser version, we need to use `Babel` plugins to polyfill. To install this plugin:
+   1.  Install Babel as Dependency
+   ```
+   npm install --save @babel/polyfill
+   ```
+   
+   2. Create a `.babelrc` configuration file
+Create a configuration file for ESLint with the following contents:
+   ```
+   {
+     "presets": [
+      [ "@babel/preset-env", {
+        "modules": false,
+        "targets": {
+         "browsers": [
+           "last 2 Chrome versions",
+           "last 2 Firefox versions",
+           "last 2 Safari versions",
+           "last 2 iOS versions",
+           "last 1 Android version",
+           "last 1 ChromeAndroid version",
+           "ie 11"
+         ]
+        },
+        "useBuiltIns": "usage"
+      } ]
+     ]
+   }
+   ```
+   
+We are good to go :smiley:. However, note that these Linters can only warn and format our code to a certain extend. We need to remain concious in ensuring our code adhere to the coding standards explained in this document. Happy coding! :desktop_computer:
 
