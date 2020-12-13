@@ -31,7 +31,7 @@
     * [`Rules common to all identifiers`](#rules-common-to-all-identifiers)
     * [`Rules by identifier type`](#rules-by-identifier-type)
     * [`Camel case: defined`](#camel-case-defined)
-- [Javascript Doc](#javascript-doc)
+- [JSDoc](#jsdoc)
     * [`General form`](#General-form)
     * [`Markdown`](#markdown)
     * [`JSDoc tags`](#jsdoc-tags)
@@ -43,12 +43,19 @@
     * [`Property comments`](#property-comments)
     * [`Type annotations`](#type-annotations)
     * [`Visibility annotations`](#visibility-annotations)
+- [Policies](#policies)
+    * [`Issues unspecified by Wiridis Style: Be Consistent!`](#issues-unspecified-by-wiridis-style-be-consistent)
+    * [`Compiler warnings`](#compiler-warnings)
+    * [`Deprecation`](#deprecation)
 - [Linters setup](#linters-setup)
-    * [`ESlint`](#eslint)
-    * [`Prettier`](#prettier)
 
 ## Preliminaries
-This document serves as the complete definition of Wiridis’s coding standards for source code in the JavaScript programming language. This coding standard is based on Google Javascript Style Guide(#https://google.github.io/styleguide/jsguide.html#terminology-notes) with exclusion of irrelevant rules, such as `googl.module`, that is not applicable to Wiridis' standard. This guide will be based on ES6 or ECMAScript 2015. 
+This document serves as the complete definition of Wiridis’s coding standards for source code in the JavaScript programming language. This coding standard is based on [Google Javascript Style Guide](https://google.github.io/styleguide/jsguide.html#terminology-notes) with exclusion of irrelevant rules, such as `googl.module`, which are not applicable to Wiridis' standard. 
+
+The following are parts in Wiridis that defer from Google Style Guide:
+- [`Comments`](#comments)
+
+This guide will be based on ES6 or ECMAScript 2015. 
 
 A JavaScript source file is described as being in Wiridis style if and only if it adheres to the rules herein.
 
@@ -56,7 +63,7 @@ Like other programming style guides, the issues covered span not only aesthetic 
 conventions or coding standards as well. However, this document focuses primarily on the hard-and-fast rules 
 that we follow universally, and avoids giving advice that isn't clearly enforceable (whether by human or tool).
 
-[say use es6, will polyfill with Babel, taken from Google Coding Standard+ link, what is changed(why yes/not-preliminary), fix link names with :, change the comment to choose one type // or /* for multiline, remove the ?? on the links, eslint file coding, add emojis + color]
+[say use es6, will polyfill with Babel, taken from Google Coding Standard+ link, what is changed(why yes/not-preliminary), eslint file coding, add emojis + color]
 
 ### General guide
 
@@ -114,7 +121,7 @@ Braces follow the Kernighan and Ritchie style (Egyptian brackets) for nonempty b
 4. Line break after the closing brace if that brace terminates a statement or the body of a function or class statement, or a class method. 
 Specifically, there is no line break after the brace if it is followed by `else`, `catch`, `while`, or a comma, semicolon, or right-parenthesis.
 
-**Good** example: 
+**Good** example :white_check_mark: : 
 ```
 class InnerClass {
   constructor() {}
@@ -158,7 +165,7 @@ Except as noted below, any line that would exceed this limit must be line-wrappe
 There is no comprehensive, deterministic formula showing exactly how to line-wrap in every situation. Very often there are several valid ways to line-wrap the same piece of code.
 The prime directive of line-wrapping is: prefer to break at a **higher syntactic level**.
 
-Preferred:
+Preferred :white_check_mark: :
 ```
 currentEstimate =
     calc(currentEstimate + x * currentEstimate) /
@@ -237,18 +244,18 @@ doSomething(
 ```
 
 ### Comments
-This section addresses implementation comments. JSDoc is addressed separately in [`Javascript Doc`](#javascript-doc).
+This section addresses implementation comments. JSDoc is addressed separately in [`JSDoc`](#jsdoc).
 
 #### Block comment style
-Block comments are indented at the same level as the surrounding code. They may be in `/* … */` or `//`-style. For multi-line `/* … */` comments, subsequent lines must start with `*` aligned with the `*` on the previous line, to make comments obvious with no extra context. (pick one only)
+Block comments are indented at the same level as the surrounding code. They may be in `/* … */`-style (for multipline) or `//`-style (for single line). For multi-line `/* … */` comments, subsequent lines must start with `*` aligned with the `*` on the previous line.
 
 ```
 /*
  * This is
  * okay.
  */
-
-/* This is fine, too. */
+ 
+ // This is okay.
 ```
 
 Do not use JSDoc (`/** … */`) for implementation comments.
@@ -283,7 +290,7 @@ Local variables are not habitually declared at the start of their containing blo
 #### Declare types as needed
 JSDoc type annotations may be added either on the line above the declaration, or else inline before the variable name if no other JSDoc is present.
 
-**Good** example:
+**Good** example :white_check_mark: :
 ```
 const /** !Array<number> */ data = [];
 
@@ -328,7 +335,7 @@ const a4 = new Array();
 
 This works as expected except for the third case: if `x1` is a whole number then a3 is an array of size `x1` where all elements are undefined. If `x1` is any other number, then an exception will be thrown, and if it is anything else then it will be a single-element array.
 
-Instead, write:
+**Good** example :white_check_mark: :
 ```
 const a1 = [x1, x2, x3];
 const a2 = [x1, x2];
@@ -1566,22 +1573,18 @@ Bad:
 
 Visibility annotations (`@private`, `@package`, `@protected`) may be specified in a `@fileoverview` block, or on any exported symbol or property. Do not specify visibility for local variables, whether within a function or at the top level of a module. All `@private` names must end with an underscore.
 
-## Linters (to be completed)
-
-Part below might be important! :warn
-
-
-### 8.1 Issues unspecified by Google Style: Be Consistent!
+## Policies
+### Issues unspecified by Wiridis Style: Be Consistent!
 
 For any style question that isn't settled definitively by this specification, prefer to do what the other code in the same file is already doing. If that doesn't resolve the question, consider emulating the other files in the same package.
 
-### 8.2 Compiler warnings
+### Compiler warnings
 
-#### 8.2.1 Use a standard warning set
+#### Use a standard warning set
 
 As far as possible projects should use `--warning_level=VERBOSE`.
 
-#### 8.2.2 How to handle a warning
+#### How to handle a warning
 
 Before doing anything, make sure you understand exactly what the warning is telling you. If you're not positive why a warning is appearing, ask for help .
 
@@ -1591,7 +1594,7 @@ Once you understand the warning, attempt the following solutions in order:
 2.  **Otherwise, determine if it's a false alarm.** If you are convinced that the warning is invalid and that the code is actually safe and correct, add a comment to convince the reader of this fact and apply the `@suppress` annotation.
 3.  **Otherwise, leave a TODO comment.** This is a **last resort**. If you do this, **do not suppress the warning.** The warning should be visible until it can be taken care of properly.
 
-#### 8.2.3 Suppress a warning at the narrowest reasonable scope
+#### Suppress a warning at the narrowest reasonable scope
 
 Warnings are suppressed at the narrowest reasonable scope, usually that of a single local variable or very small method. Often a variable or method is extracted for that reason alone.
 
@@ -1606,6 +1609,72 @@ Example
 
 Even a large number of suppressions in a class is still better than blinding the entire class to this type of warning.
 
-### 8.3 Deprecation
+### Deprecation
 
 Mark deprecated methods, classes or interfaces with `@deprecated` annotations. A deprecation comment must include simple, clear directions for people to fix their call sites.
+
+## Linters setup
+These are some tools that can make our life easier regarding the coding standards :smiley:.
+
+To fit the Wiridis coding standard, we can iinstall linters and configure VSCode as shown below:
+1. Install required dependencies as DevDependencies
+
+   ```
+   $ npm install --save-dev eslint prettier eslint-config-google eslint-config-prettier eslint-plugin-prettier 
+   ```
+
+ESLint: Linters that can help us spot coding standard mistake in our program on the `Problems` tab.
+
+Prettier: Plugin to autoformat our code to adhere to the required coding standard
+
+Remaining modules are for configuration so that all our linters works as expected.
+
+:warn: Tips: You also need to install module for your own Javascript framework for ESLint to function properly. For VueJS, we can add `eslint-plugin-vue` as shown below:
+
+   ```
+   $ npm install --save-dev eslint prettier eslint-config-google eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue
+   ```
+
+2. Create a `.eslintrc.json` configuration file
+Create a configuration file for ESLint with the following contents:
+   ```
+   {
+     "env": {
+       "browser": true,
+       "commonjs": true,
+       "es6": true,
+       "node": true
+     },
+     "extends": ["google", "plugin:prettier/recommended", "eslint:recommended"],
+     "plugins": ["prettier"],
+     "parserOptions": {
+       "ecmaVersion": 6,
+       "sourceType": "module"
+     },
+     "rules": {
+       "indent": ["warn", 2],
+       "prettier/prettier": "warn"
+     }
+   }
+   ```
+
+3. Create a `.prettierrc.json` configuration file
+Create a configuration file for ESLint with the following contents:
+   ```
+   {
+     "trailingComma": "es5",
+     "useTabs": false,
+     "tabWidth": 2,
+     "semi": true,
+     "singleQuote": true,
+     "bracketSpacing": true,
+     "printWidth": 80,
+     "endOfLine": "auto"
+   }
+   ```
+4. Set Prettier to format on Save (optional)
+You can set Prettier to format your file on each save. Open the Settings pane (`Ctrl + ,` or `Cmd + ,`), search for "Format" in the search field and check the box that says “Editor: Format on Save”.
+![VSCode settings image](format%20on%20save%20pic.PNG)
+
+We are good to go :smiley:. However, note that these Linters can only warn and format our code to a certain extend. We need to remain concious in ensuring our code adhere to the coding standards explained in this document.
+
