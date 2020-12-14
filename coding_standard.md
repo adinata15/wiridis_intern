@@ -303,8 +303,6 @@ Local variables are not habitually declared at the start of their containing blo
 #### Declare types as needed
 JSDoc type annotations may be added either on the line above the declaration, or else inline before the variable name if no other JSDoc is present.
 
-
-
 ```
 👍 GOOD 😊
 const /** !Array<number> */ data = [];
@@ -339,8 +337,8 @@ const values = [
 #### Do not use the `Array` constructor
 The constructor is error-prone if arguments are added or removed. Use a literal instead.
 
-**Bad** example:
 ```
+👎 BAD 😱 
 const a1 = new Array(x1, x2, x3);
 const a2 = new Array(x1, x2);
 const a3 = new Array(x1);
@@ -349,8 +347,8 @@ const a4 = new Array();
 
 This works as expected except for the third case: if `x1` is a whole number then a3 is an array of size `x1` where all elements are undefined. If `x1` is any other number, then an exception will be thrown, and if it is anything else then it will be a single-element array.
 
-**Good** example :white_check_mark: :
 ```
+👍 GOOD 😊
 const a1 = [x1, x2, x3];
 const a2 = [x1, x2];
 const a3 = [x1];
@@ -372,12 +370,12 @@ Array literals may be used on the left-hand side of an assignment to perform des
 
 Destructuring may also be used for function parameters (note that a parameter name is required but ignored). Always specify `[]` as the default value if a destructured array parameter is optional, and provide default values on the left hand side:
 
+    👍 GOOD 😊
     /** @param {!Array<number>=} param1 */
     function optionalDestructuring([a = 4, b = 2] = []) { … };
     
 
-**Bad** example:
-
+    👎 BAD 😱 
     function badDestructuring([a, b] = [4, 2]) { … };
     
 
@@ -498,7 +496,6 @@ Example:
     function destructured(ordinary, {num, str = 'some default'} = {})
    
    
-
     👎 BAD 😱 
     /** @param {{x: {num: (number|undefined), str: (string|undefined)}}} param1 */
     function nestedTooDeeply({x: {num, str}}) {};
@@ -866,12 +863,12 @@ It is very rarely correct to do nothing in response to a caught exception. When 
     return handleTextResponse(response);
     
 
-      👎 BAD 😱 
-      try {
-        shouldFail();
-        fail('expected an error');
-      } catch (expected) {
-      }
+   👎 BAD 😱 
+   try {
+     shouldFail();
+     fail('expected an error');
+   } catch (expected) {
+   }
     
 
 #### Switch statements
@@ -1445,6 +1442,7 @@ Nullability modifiers have different requirements for different types, which fal
 1.  Type annotations for primitives (`string`, `number`, `boolean`, `symbol`, `undefined`, `null`) and literals (`{function(...): ...}` and `{{foo: string...}}`) are always non-nullable by default. Use the `?` modifier to make it nullable, but omit the redundant `!`.
 2.  Reference types (generally, anything in `UpperCamelCase`, including `some.namespace.ReferenceType`) refer to a class, enum, record, or typedef defined elsewhere. Since these types may or may not be nullable, it is impossible to tell from the name alone whether it is nullable or not. Always use explicit `?` and `!` modifiers for these types to prevent ambiguity at use sites.
 
+```
     👎 BAD 😱 
     const /** MyObject */ myObject = null; // Non-primitive types must be annotated.
     const /** !number */ someNum = 5; // Primitives are non-nullable by default.
@@ -1455,8 +1453,9 @@ Nullability modifiers have different requirements for different types, which fal
     // Not sure if object (nullable), enum (non-nullable, unless otherwise
     // specified), or typedef (depends on definition).
     const /** SomeCamelCaseName */ n = ...;
-    
+```
 
+```
     👍 GOOD 😊
     const /** ?MyObject */ myObject = null;
     const /** number */ someNum = 5;
@@ -1464,7 +1463,7 @@ Nullability modifiers have different requirements for different types, which fal
     const /** {foo: string, bar: number} */ record = ...;
     const /** !MyTypeDef */ def = ...;
     const /** ?SomeCamelCaseName */ n = ...;
-    
+```    
 
 #### Type Casts
 
