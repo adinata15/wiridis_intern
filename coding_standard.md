@@ -489,7 +489,7 @@ Example:
     👍 GOOD 😊
     /**
      * @param {string} ordinary
-     * @param {{num: (number|undefined), str: (string|undefined)}=} param1
+     * @param {{num: (number|undefined), str: (string|undefined)}} param1
      *     num: The number of times to do something.
      *     str: A string to do stuff to.
      */
@@ -863,13 +863,14 @@ It is very rarely correct to do nothing in response to a caught exception. When 
     return handleTextResponse(response);
     
 
+```
    👎 BAD 😱 
    try {
      shouldFail();
      fail('expected an error');
    } catch (expected) {
    }
-    
+```   
 
 #### Switch statements
 
@@ -989,12 +990,12 @@ Identifiers use only ASCII letters and digits, and, in a small number of cases n
 
 Give as descriptive a name as possible, within reason. Do not worry about saving horizontal space as it is far more important to make your code immediately understandable by a new reader. Do not use abbreviations that are ambiguous or unfamiliar to readers outside your project, and do not abbreviate by deleting letters within a word.
 
+    👍 ACCEPTABLE 😊 
     errorCount          // No abbreviation.
     dnsConnectionIndex  // Most people know what "DNS" stands for.
     referrerUrl         // Ditto for "URL".
     customerId          // "Id" is both ubiquitous and unlikely to be misunderstood.
-    
-
+       
     👎 BAD 😱 
     n                   // Meaningless.
     nErr                // Ambiguous abbreviation.
@@ -1078,7 +1079,7 @@ Parameter names are written in `lowerCamelCase`. Note that this applies even if 
 
 One-character parameter names should not be used in public methods.
 
-**Exception**: When required by a third-party framework, parameter names may begin with a `$`. This exception does not apply to any other identifiers (e.g. local variables or properties).
+>**Exception**: When required by a third-party framework, parameter names may begin with a `$`. This exception does not apply to any other identifiers (e.g. local variables or properties).
 
 #### Local variable names
 
