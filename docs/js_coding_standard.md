@@ -503,7 +503,7 @@ Example:
     function nonShorthandProperty({num: a, str: b} = {}) {};
     /** @param {{a: number, b: number}} param1 */
     function computedKey({a, b, [a + b]: c}) {};
-    /** @param {{a: number, b: string}=} param1 */
+    /** @param {{a: number, b: string}} param1 */
     function nontrivialDefault({a, b} = {a: 2, b: 4}) {};
     
 
