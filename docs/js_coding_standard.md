@@ -74,7 +74,7 @@ At the end of the document, we also include software setup for the Linters that 
 
 Quick guide to Javascript coding standard:
 
-![JS coding standard quick summary](Javascript%20coding%20standard%20cheatsheet%20diagram.JPG)
+![JS coding standard quick summary](../images/Javascript%20coding%20standard%20cheatsheet%20diagram.JPG)
 
 ### General resource
 
