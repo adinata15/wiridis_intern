@@ -499,7 +499,7 @@ Example:
     👎 BAD 😱 
     /** @param {{x: {num: (number|undefined), str: (string|undefined)}}} param1 */
     function nestedTooDeeply({x: {num, str}}) {};
-    /** @param {{num: (number|undefined), str: (string|undefined)}=} param1 */
+    /** @param {{num: (number|undefined), str: (string|undefined)}} param1 */
     function nonShorthandProperty({num: a, str: b} = {}) {};
     /** @param {{a: number, b: number}} param1 */
     function computedKey({a, b, [a + b]: c}) {};
