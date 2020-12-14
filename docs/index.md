@@ -74,7 +74,7 @@ At the end of the document, we also include software setup for the Linters that 
 
 Quick guide to Javascript coding standard:
 
-![JS coding standard quick summary](../images/Javascript%20coding%20standard%20cheatsheet%20diagram.JPG)
+![JS coding standard quick summary](images/Javascript%20coding%20standard%20cheatsheet%20diagram.JPG)
 
 ### General resource
 
@@ -2090,7 +2090,7 @@ Create a configuration file for ESLint with the following contents:
    ```
 4. Set Prettier to format on Save (optional)
 You can set Prettier to format your file on each save. Open the Settings pane (`Ctrl + ,` or `Cmd + ,`), search for "Format" in the search field and check the box that says “Editor: Format on Save”.
-![VSCode settings image](../images/format%20on%20save%20pic.png)
+![VSCode settings image](images/format%20on%20save%20pic.png)
 
 ### Babel
 To ensure code compatibility with older browser version, we need to use [`Babel`](https://babeljs.io/) plugins to polyfill. To install this plugin:
