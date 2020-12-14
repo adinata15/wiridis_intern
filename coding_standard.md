@@ -3,6 +3,7 @@
 ## Table of Contents
 - [Preliminaries](#preliminaries)
     * [`General guide`](#general-guide)
+    * [`General resource`](#general-resource)
 - [Source file basics](#source-file-basics)
     * [`File name`](#file-name)
     * [`File encoding`](#file-encoding)
@@ -47,6 +48,8 @@
     * [`Issues unspecified by Wiridis Style: Be Consistent!`](#issues-unspecified-by-wiridis-style-be-consistent)
     * [`Compiler warnings`](#compiler-warnings)
     * [`Deprecation`](#deprecation)
+- [Frameworks](#frameworks)
+    * [`Vue`](#vue)    
 - [Software setup](#software-setup)
     * [`Linters setup`](#linters-setup)
     * [`Babel`](#babel)
@@ -65,11 +68,23 @@ Like other programming style guides, the issues covered span not only aesthetic 
 conventions or coding standards as well. However, this document focuses primarily on the hard-and-fast rules 
 that we follow universally, and avoids giving advice that isn't clearly enforceable (whether by human or tool).
 
+At the end of the document, we also include software setup for the Linters that can help you adhere to the coding standard.
+
 ### General guide
 
 Quick guide to Javascript coding standard:
 
 ![JS coding standard quick summary](Javascript%20coding%20standard%20cheatsheet%20diagram.JPG)
+
+### General resource
+
+Here are some resources that might be useful to get a quick understanding of the coding standard and tools that we are using:
+1. [`Google coding standard`](https://google.github.io/styleguide/jsguide.html#terminology-notes)
+2. [`Vue documentation`](https://vuejs.org/v2/guide/) and [`style guide`](https://vuejs.org/v2/style-guide/)
+3. [`ESLint documentation`](https://eslint.org/docs/user-guide/getting-started)
+3. [`Prettier documentation`](https://prettier.io/docs/en/index.html)
+4. [`Configuring Prettier and ESLint`](https://medium.com/better-programming/integrating-prettier-and-eslint-with-vs-code-1d2f6fb53bc9)
+5. [`Babel polyfill documemtation`](https://babeljs.io/docs/en/babel-polyfill) and [`setup`](https://imranhsayed.medium.com/install-and-set-up-babel-for-your-project-a6ce1fc37633)
 
 ## Source file basics
 
@@ -97,16 +112,16 @@ Legacy octal escapes are never used.
 Braces are **required for all control structures** (i.e. `if`, `else`, `for`, `do`, `while`, as well as any others), 
 even if the body contains only a single statement. The first statement of a non-empty block must begin on its own line.
 
-**Bad** example:
 ```
+👎 BAD 😱 
 if (someVeryLongCondition())
   doSomething();
 
 for (let i = 0; i < foo.length; i++) bar(foo[i]);
 ```
 
-**Good** example:
 ```
+👍 GOOD 😊
 if (someVeryLongCondition())
   doSomething();
 
@@ -121,8 +136,9 @@ Braces follow the Kernighan and Ritchie style (Egyptian brackets) for nonempty b
 4. Line break after the closing brace if that brace terminates a statement or the body of a function or class statement, or a class method. 
 Specifically, there is no line break after the brace if it is followed by `else`, `catch`, `while`, or a comma, semicolon, or right-parenthesis.
 
-**Good** example :white_check_mark: : 
+
 ```
+👍 GOOD 😊
 class InnerClass {
   constructor() {}
 
@@ -165,15 +181,16 @@ Except as noted below, any line that would exceed this limit must be line-wrappe
 There is no comprehensive, deterministic formula showing exactly how to line-wrap in every situation. Very often there are several valid ways to line-wrap the same piece of code.
 The prime directive of line-wrapping is: prefer to break at a **higher syntactic level**.
 
-Preferred :white_check_mark: :
+
 ```
+👍 GOOD 😊
 currentEstimate =
     calc(currentEstimate + x * currentEstimate) /
         2.0;
 ```
 
-Discouraged:
 ```
+👎 BAD 😱 
 currentEstimate = calc(currentEstimate + x *
     currentEstimate) / 2.0;
 ```
@@ -244,35 +261,31 @@ doSomething(
 ```
 
 ### Comments
-This section addresses implementation comments. JSDoc is addressed separately in [`JSDoc`](#jsdoc).
+This section addresses implementation comments. JSDoc is addressed separately in [`JSDoc`](#jsdoc) and description comments in [`Functions`](#functions).
 
 #### Block comment style
-Block comments are indented at the same level as the surrounding code. They may be in `/* … */`-style (for multipline) or `//`-style (for single line). For multi-line `/* … */` comments, subsequent lines must start with `*` aligned with the `*` on the previous line.
+Block comments are indented at the same level as the surrounding code. They need to be in `//`-style. If comment exceed the 80 word limit, it can be continued in the next line with another `//` preceeding it.
 
 ```
-/*
- * This is
- * okay.
- */
- 
  // This is okay.
+ 
+ // This is okay
+ // with this too.
 ```
 
-Do not use JSDoc (`/** … */`) for implementation comments.
+Do not use JSDoc (`/** … */`) for implementation comments. Only use JSDoc (`/** … */`) for descriptions of functions, arrays, variables or objects as described in [`Functions`](#functions).
 
 #### Parameter name comments
 “Parameter name” comments should be used whenever the value and method name do not sufficiently convey the meaning, and refactoring the method to be clearer is infeasible . Their preferred format is before the value with =:
 
 ```
-someFunction(obviousParam, /* shouldRender= */ true, /* name= */ 'hello');
+someFunction(obviousParam, /** shouldRender= */ true, /** name= */ 'hello');
 ```
 For consistency with surrounding code you may put them after the value without =:
 
 ```
-someFunction(obviousParam, true /* shouldRender */, 'hello' /* name */);
+someFunction(obviousParam, true /** shouldRender */, 'hello' /** name */);
 ```
-
-Do not use JSDoc (`/** … */`) for implementation comments.
 
 ## Language features
 JavaScript includes many dubious (and even dangerous) features. This section delineates which features may or may not be used, and any additional constraints on their use.
@@ -290,8 +303,10 @@ Local variables are not habitually declared at the start of their containing blo
 #### Declare types as needed
 JSDoc type annotations may be added either on the line above the declaration, or else inline before the variable name if no other JSDoc is present.
 
-**Good** example :white_check_mark: :
+
+
 ```
+👍 GOOD 😊
 const /** !Array<number> */ data = [];
 
 /**
@@ -303,9 +318,8 @@ const data = [];
 
 Mixing inline and JSDoc styles is not allowed: the compiler will only process the first JsDoc and the inline annotations will be lost.
 
-
-**Bad** example:
 ```
+👎 BAD 😱 
 /** Some description. */
 const /** !Array<number> */ data = [];
 ```
@@ -391,8 +405,7 @@ While `Object` does not have the same problems as `Array`, it is still **disallo
 
 Object literals may represent either _structs_ (with unquoted keys and/or symbols) or _dicts_ (with quoted and/or computed keys). Do not mix these key types in a single object literal.
 
-**Disallowed:**
-
+    👎 BAD 😱 
     {
       width: 42, // struct-style unquoted key
       'maxWidth': 43, // dict-style quoted key
@@ -401,8 +414,7 @@ Object literals may represent either _structs_ (with unquoted keys and/or symbol
 
 This also extends to passing the property name to functions, like `hasOwnProperty`. In particular, doing so will break in compiled code because the compiler cannot rename/obfuscate the string literal.
 
-**Disallowed:**
-
+    👎 BAD 😱 
     /** @type {{width: number, maxWidth: (number|undefined)}} */
     const o = {width: 42};
     if (o.hasOwnProperty('maxWidth')) {
@@ -476,6 +488,7 @@ Destructured objects may also be used as function parameters, but should be kept
 
 Example:
 
+    👍 GOOD 😊
     /**
      * @param {string} ordinary
      * @param {{num: (number|undefined), str: (string|undefined)}=} param1
@@ -483,10 +496,10 @@ Example:
      *     str: A string to do stuff to.
      */
     function destructured(ordinary, {num, str = 'some default'} = {})
-    
+   
+   
 
-Disallowed:
-
+    👎 BAD 😱 
     /** @param {{x: {num: (number|undefined), str: (string|undefined)}}} param1 */
     function nestedTooDeeply({x: {num, str}}) {};
     /** @param {{num: (number|undefined), str: (string|undefined)}=} param1 */
@@ -557,8 +570,7 @@ Where it does not interfere with readability, prefer module-local functions over
 
 Static methods should only be called on the base class itself. Static methods should not be called on variables containing a dynamic instance that may be either the constructor or a subclass constructor (and must be defined with `@nocollapse` if this is done), and must not be called directly on a subclass that doesn’t define the method itself.
 
-Disallowed:
-
+    👎 BAD 😱 
     class Base { /** @nocollapse */ static foo() {} }
     class Sub extends Base {}
     function callFoo(cls) { cls.foo(); }  // discouraged: don't call static methods dynamically
@@ -656,8 +668,7 @@ The left-hand side of the arrow contains zero or more parameters. Parentheses ar
 
 The right-hand side of the arrow contains the body of the function. By default the body is a block statement (zero or more statements surrounded by curly braces). The body may also be an implicitly returned single expression if either: the program logic requires returning a value, or the `void` operator precedes a single function or method call (using `void` ensures `undefined` is returned, prevents leaking values, and communicates intent). The single expression form is preferred if it improves readability (e.g., for short or simple expressions).
 
-**Good** examples:
-
+    👍 GOOD 😊
     /**
      * Arrow functions can be documented just like normal functions.
      * @param {number} numParam A number to add.
@@ -685,8 +696,7 @@ The right-hand side of the arrow contains the body of the function. By default t
     }
     
 
-**Bad** example:
-
+    👎 BAD 😱 
     /**
      * A function with no params and no returned value.
      * This single expression body usage is illegal because the program logic does
@@ -808,8 +818,7 @@ Example:
 
 Do not use _line continuations_ (that is, ending a line inside a string literal with a backslash) in either ordinary or template string literals. Even though ES5 allows this, it can lead to tricky errors if any trailing whitespace comes after the slash, and is less obvious to readers.
 
-**Bad** example:
-
+    👎 BAD 😱 
     const longString = 'This is a very long string that far exceeds the 80 \
         column limit. It unfortunately contains long stretches of spaces due \
         to how the continued lines are indented.';
@@ -817,6 +826,7 @@ Do not use _line continuations_ (that is, ending a line inside a string literal 
 
 Instead, write
 
+    👍 GOOD 😊
     const longString = 'This is a very long string that far exceeds the 80 ' +
         'column limit. It does not contain long stretches of spaces since ' +
         'the concatenated strings are cleaner.';
@@ -856,8 +866,7 @@ It is very rarely correct to do nothing in response to a caught exception. When 
     return handleTextResponse(response);
     
 
-Disallowed:
-
+      👎 BAD 😱 
       try {
         shouldFail();
         fail('expected an error');
@@ -935,8 +944,7 @@ Do not use non-standard features. This includes old features that have been remo
 
 Never use `new` on the primitive object wrappers (`Boolean`, `Number`, `String`, `Symbol`), nor include them in type annotations.
 
-Disallowed:
-
+    👎 BAD 😱 
     const /** Boolean */ x = new Boolean(false);
     if (x) alert(typeof x);  // alerts 'object' - WAT?
     
@@ -945,6 +953,7 @@ The wrappers may be called as functions for coercing (which is preferred over us
 
 Example:
 
+    👍 GOOD 😊
     const /** boolean */ x = Boolean(0);
     if (!x) alert(typeof x);  // alerts 'boolean', as expected
     
@@ -959,13 +968,13 @@ Do not add symbols to the global object unless absolutely necessary (e.g. requir
 
 Never invoke a constructor in a `new` statement without using parentheses `()`.
 
-Disallowed:
-
+    👎 BAD 😱 
     new Foo;
     
 
 Use instead:
 
+    👍 GOOD 😊
     new Foo();
     
 
@@ -989,8 +998,7 @@ Give as descriptive a name as possible, within reason. Do not worry about saving
     customerId          // "Id" is both ubiquitous and unlikely to be misunderstood.
     
 
-Disallowed:
-
+    👎 BAD 😱 
     n                   // Meaningless.
     nErr                // Ambiguous abbreviation.
     nCompConns          // Ambiguous abbreviation.
@@ -1045,7 +1053,6 @@ Examples:
     /** @type {string} */ MyClass.staticButMutable = 'not @const, can be reassigned';
     const /** Set<string> */ mutableCollection = new Set();
     const /** ImmutableSet<SomeMutableType> */ mutableElements = ImmutableSet.of(mutable);
-    const Foo = goog.require('my.Foo');  // mirrors imported name
     const logger = log.getLogger('loggers.are.not.immutable');
     
 
@@ -1202,8 +1209,7 @@ Instead, write a Markdown list:
 
 This style allows a subset of JSDoc tags. See [JSDoc tag reference](#jsdoc-tag-reference) for the complete list. Most tags must occupy their own line, with the tag at the beginning of the line.
 
-Disallowed:
-
+    👎 BAD 😱 
     /**
      * The "param" tag must occupy its own line and may not be combined.
      * @param {number} left @param {number} right
@@ -1257,7 +1263,7 @@ Do not indent when wrapping a `@desc` or `@fileoverview` description.
 
 ### Top/file-level comments
 
-A file may have a top-level file overview. A copyright notice , author information, and default [visibility level](#jsdoc-visibility-annotations) are optional. File overviews are generally recommended whenever a file consists of more than a single class definition. The top level comment is designed to orient readers unfamiliar with the code to what is in this file. If present, it may provide a description of the file's contents and any dependencies or compatibility information. Wrapped lines are not indented.
+A file may have a top-level file overview. A copyright notice , author information, and default [visibility annotations](#visibility-annotations) are optional. File overviews are generally recommended whenever a file consists of more than a single class definition. The top level comment is designed to orient readers unfamiliar with the code to what is in this file. If present, it may provide a description of the file's contents and any dependencies or compatibility information. Wrapped lines are not indented.
 
 Example:
 
@@ -1439,8 +1445,7 @@ Nullability modifiers have different requirements for different types, which fal
 1.  Type annotations for primitives (`string`, `number`, `boolean`, `symbol`, `undefined`, `null`) and literals (`{function(...): ...}` and `{{foo: string...}}`) are always non-nullable by default. Use the `?` modifier to make it nullable, but omit the redundant `!`.
 2.  Reference types (generally, anything in `UpperCamelCase`, including `some.namespace.ReferenceType`) refer to a class, enum, record, or typedef defined elsewhere. Since these types may or may not be nullable, it is impossible to tell from the name alone whether it is nullable or not. Always use explicit `?` and `!` modifiers for these types to prevent ambiguity at use sites.
 
-Bad:
-
+    👎 BAD 😱 
     const /** MyObject */ myObject = null; // Non-primitive types must be annotated.
     const /** !number */ someNum = 5; // Primitives are non-nullable by default.
     const /** number? */ someNullableNum = null; // ? should precede the type.
@@ -1452,8 +1457,7 @@ Bad:
     const /** SomeCamelCaseName */ n = ...;
     
 
-Good:
-
+    👍 GOOD 😊
     const /** ?MyObject */ myObject = null;
     const /** number */ someNum = 5;
     const /** ?number */ someNullableNum = null;
@@ -1464,7 +1468,7 @@ Good:
 
 #### Type Casts
 
-In cases where the compiler doesn't accurately infer the type of an expression, and the assertion functions in [goog.asserts](https://google.github.io/closure-library/api/goog.asserts.html) cannot remedy it , it is possible to tighten the type by adding a type annotation comment and enclosing the expression in parentheses. Note that the parentheses are required.
+In cases where the compiler doesn't accurately infer the type of an expression, and the assertion functions, it is possible to tighten the type by adding a type annotation comment and enclosing the expression in parentheses. Note that the parentheses are required.
 
     /** @type {number} */ (x)
     
@@ -1473,15 +1477,13 @@ In cases where the compiler doesn't accurately infer the type of an expression, 
 
 Always specify template parameters. This way compiler can do a better job and it makes it easier for readers to understand what code does.
 
-Bad:
-
+    👎 BAD 😱 
     const /** !Object */ users = {};
     const /** !Array */ books = [];
     const /** !Promise */ response = ...;
     
 
-Good:
-
+    👍 GOOD 😊
     const /** !Object<string, !User> */ users = {};
     const /** !Array<string> */ books = [];
     const /** !Promise<!Response> */ response = ...;
@@ -1500,16 +1502,11 @@ Cases when template parameters should not be used:
 
 Where the function definition is given, do not use a function type expression. Specify parameter and return types with `@param` and `@return`, or with inline annotations (see [Method and function comments](#method-and-function-comments)). This includes anonymous functions and functions defined and assigned to a const (where the function jsdoc appears above the whole assignment expression).
 
-Function type expressions are needed, for example, inside `@typedef`, `@param` or `@return`. Use it also for variables or properties of function type, if they are not immediately initialized with the function definition.
+Function type expressions are needed, for example, inside `@typedef`, `@param` or `@return`. Use it also for variables or properties of function type, if they are not immediately initialized with the function definition. When using a function type expression, always specify the return type explicitly. Otherwise the default return type is unknown (`?`), which leads to strange and unexpected behavior, and is rarely what is actually desired.
 
-      /** @private {function(string): string} */
-      this.idGenerator_ = googFunctions.identity;
-    
+Type error, but no warning given:
 
-When using a function type expression, always specify the return type explicitly. Otherwise the default return type is unknown (`?`), which leads to strange and unexpected behavior, and is rarely what is actually desired.
-
-Bad - type error, but no warning given:
-
+    👎 BAD 😱 
     /** @param {function()} generateNumber */
     function foo(generateNumber) {
       const /** number */ x = generateNumber();  // No compile-time type error here.
@@ -1518,8 +1515,7 @@ Bad - type error, but no warning given:
     foo(() => 'clearly not a number');
     
 
-Good:
-
+    👍 GOOD 😊
     /**
      * @param {function(): *} inputFunction1 Can return any type.
      * @param {function(): undefined} inputFunction2 Definitely doesn't return
@@ -1533,8 +1529,7 @@ Good:
 
 Within a type annotation, a single space or line break is required after each comma or colon. Additional line breaks may be inserted to improve readability or avoid exceeding the column limit. These breaks should be chosen and indented following the applicable guidelines (e.g. [Line Wrapping](#line-wrapping) and [Block Indentation](#block-indentation)). No other whitespace is allowed in type annotations.
 
-Good:
-
+    👍 GOOD 😊
     /** @type {function(string): number} */
     
     /** @type {{foo: number, bar: number}} */
@@ -1557,8 +1552,7 @@ Good:
      */
     
 
-Bad:
-
+    👎 BAD 😱 
     // Only put a space after the colon
     /** @type {function(string) : number} */
     
@@ -1613,6 +1607,427 @@ Even a large number of suppressions in a class is still better than blinding the
 
 Mark deprecated methods, classes or interfaces with `@deprecated` annotations. A deprecation comment must include simple, clear directions for people to fix their call sites.
 
+
+## Frameworks
+### Vue
+This style guide is only specific for Vue and is mainly adopted from [`Vue style guide`](https://vuejs.org/v2/style-guide/).
+
+### Component naming standards
+
+#### Components _must_ be multi-word
+- All component names must always be multi-word (except for App.vue).
+
+#### Component name property
+- All components _must_ have a name property. That name must be the same name as the component file name. 
+
+```js
+👎 BAD 😱 
+// AppDrawer.vue
+export default {
+  props: {
+    //...
+  },
+  computed: {
+    //...
+  }
+}
+```
+```js
+👍 GOOD 😊
+// AppDrawer.vue
+export default {
+  name: "AppDrawer",
+  props: {
+    //...
+  },
+  computed: {
+    //...
+  }
+}
+```
+
+#### Single-instance component names
+- Names of components that should only have a single active instance used throughout the application should begin with the `App` prefix. 
+
+```js
+👎 BAD 😱 
+// Drawer.vue
+export default {
+  name: "Drawer"
+}
+
+// TheDrawer.vue
+export default {
+  name: "TheDrawer"
+}
+```
+```js
+👍 GOOD 😊
+// AppDrawer.vue
+export default {
+  name: "AppDrawer",
+}
+```
+
+#### Base component names
+
+- Components that are reused throughout the application and have no coupled relationship to a particular component, container or view should be prepended with `Base`. These will generally be functional components with no state of their own and only function as UI components.
+
+- Their names often include the name of an element they wrap (e.g. BaseButton, BaseColumn), unless no element exists for their specific purpose (e.g. BaseIcon). If you build similar components for a more specific context, they will almost always consume these components (e.g. BaseButton may be used in ButtonSubmit).
+
+> 💡 _Some advantages of this convention:_
+>- When organized alphabetically in editors, your app’s base components are all listed together, making them easier to identify.
+>- Since component names should always be multi-word, this convention prevents you from having to choose an arbitrary prefix for simple component wrappers (e.g. MyButton, VueButton).
+
+
+#### Tightly coupled component names
+
+- Child components that are tightly coupled with their parent should include the parent component name as a prefix.
+
+- If a component only makes sense in the context of a single parent component, that relationship should be evident in its name.
+
+- This naming convention should continue down the chain of parent/child relationships between components. For example if I have a `AppDrawer` component, which has a component which contains a list of navigation links called `AppDrawerNav`, then its child link component would be named `AppDrawerNavLinks`.
+
+
+#### Order of words in component names
+
+- Component names should start with the highest-level (often most general) words and end with descriptive modifying words. For example...
+
+```
+components/
+  app/
+    AppDrawer.vue
+    AppDrawerFooter.vue
+    AppDrawerHeader.vue
+    AppDrawerHeaderLogo.vue
+    AppDrawerNav.vue
+    AppDrawerNavLink.vue
+```
+
+>The one exception to this rule is for view components AKA pages. These components should be appended with the word `Page`.
+
+- Do not place the modifier words at the beginning of the component name. Although it may read more like plain english this way, it will cause your components to be unorganized in the code editor, as well as increase the possibility of naming conflicts.
+
+```
+👎 BAD 😱 
+components/ 
+  ClearSearchButton.vue
+  LaunchOnStartupCheckbox.vue
+  RunSearchButton.vue
+  SearchInput.vue
+  TermsCheckbox.vue
+```
+```
+👍 GOOD 😊
+components/
+  SearchButtonClear.vue
+  SearchButtonRun.vue
+  SearchInputQuery.vue
+  SettingsCheckboxTerms.vue
+  SettingsCheckboxLaunchOnStartup.vue
+```
+
+
+#### Component name casing
+
+- All naming of and references to components should be PascalCase thoughout the application. Referencing components in the template and JavaScript should be PascalCase. Naming of component files should be PascalCase.
+
+> 💡 _PascalCase has a few advantages over kebab-case:_
+>- Editors can autocomplete component names in templates, because PascalCase is also used in JavaScript.
+>- `<MyComponent>` is more visually distinct from a single-word HTML element than `<my-component>`, because there are two character differences (the two capitals), rather than just one (a hyphen).
+>- If you use any non-Vue custom elements in your templates, such as a web component, PascalCase ensures that your Vue components remain distinctly visible.
+- _If_ we ever have the need to use DOM templates, you have to use kebab-casing, but this is unlikely. 
+
+### Layout components
+#### Shared Layout components
+
+- Favor creating layout components that can wrap components to provide shared components or create a layout of multiple components passed as children.
+
+- These components should either use slots (single file component) or children (JS style components).
+
+- In the example below, the `AppLayout` component contains the header and footer which will render around the page displayed in `<router-view>`.
+
+```html
+<!-- App.vue -->
+<template>
+  <div id="app">
+    <AppLayout>
+      <router-view />
+    </AppLayout>
+  </div>
+</template>
+
+<!-- AppLayout.vue -->
+<template>
+  <div>
+    <AppHeader>{{ title }}</AppHeader>
+    <slot></slot>
+    <AppFooter />
+  </div>
+</template>
+```
+
+### Templates
+
+#### Always use directive shorthands
+
+- Always use directive [shorthands](https://vuejs.org/v2/guide/syntax.html#Shorthands) in templates
+  - `:` > `v-bind:`
+  - `@` > `v-on:`
+  - `#` > `v-slot`
+
+> This keeps the code standardized and less prone to misunderstanding if using shorthand in some components but not in others.
+
+#### No complex expressions in templates
+- Any JavaScript expressions should be encapsulated in the methods or computed properties and called in the template. Templates should not contain any complex expressions, only function/method references. 
+```html
+👎 BAD 😱 
+<!-- In template -->
+<MyComponent :name="fullName.split(' ').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')" />
+```
+```html
+👍 GOOD 😊
+<!-- In template -->
+<MyComponent :name="normalizedFullName"/>
+<!-- In the script -->
+computed: {
+  normalizedFullName() {
+    return this.fullName.split(' ').map(word =>
+      word[0].toUpperCase() + word.slice(1)
+    ).join(' ')
+  }
+}
+```
+#### Computed style classes should come from the computed property
+- Computed styles should be written as computed properties rather than writing the expression in the template.
+
+#### Self-closing components
+- Components with no child/slot content should be self-closing in single-file components. 
+```html
+👎 BAD 😱 
+<!-- Without any slot content -->
+<MyComponent></MyComponent>
+```
+```html
+👍 GOOD 😊
+<!-- Without any slot content -->
+<MyComponent/>
+<!-- With slot content -->
+<MyComponent>Hello!</MyComponent>
+```
+
+>Components that self-close communicate that they not only have no content, but are meant to have no content. It’s the difference between a blank page in a book and one labeled “This page intentionally left blank.” Your code is also cleaner without the unnecessary closing tag.
+
+
+---
+### Props
+
+Prop validations should be as specific as possible. See the Vue documentation for more on this. [Prop Validation documentation.](https://vuejs.org/v2/guide/components-props.html#Prop-Validation)
+
+#### Types
+
+- All props _must_ be typed. A type can be any JavaScript constructor. See [prop type documentation here](https://vuejs.org/v2/guide/components-props.html#Type-Checks). 
+
+```js
+props: {
+  someProp: String
+}
+```
+
+#### Required
+- Ideally, props should contain the `required` option as well.
+```js
+props: {
+  someProp: {
+    type: String,
+    required: false
+  }
+}
+```
+#### Default reference values (non primitives)
+- If a prop has a default value that is not a primitive, write it as an anonymous function that returns the value
+```js
+props: {
+  somePropObj: Object,
+  required: true,
+  default: () => ({})
+}
+```
+OR
+```js
+props: {
+  somePropArr: Array,
+  required: true,
+  default: () => []
+}
+```
+
+>⚠️ Note that props are validated before a component instance is created, so instance properties (e.g. data, computed, etc) will not be available inside default or validator functions.
+
+### Computed properties
+#### Always return a value
+- Computed properties should always `return`.
+
+#### Never take arguments
+- Computed properties should never take any arguments.
+
+#### Keep them small, testable, and composable.
+Simpler, well-named computed properties are:
+- Easier to test
+    When each computed property contains only a very simple expression, with very few dependencies, it’s much easier to write tests confirming that it works correctly.
+- Easier to read
+    Simplifying computed properties forces you to give each value a descriptive name, even if it’s not reused. This makes it much easier for other developers (and future you) to focus in on the code they care about and figure out what’s going on.
+- More adaptable to changing requirements
+    Any value that can be named might be useful to the view. For example, we might decide to display a message telling the user how much money they saved. We might also decide to calculate sales tax, but perhaps display it separately, rather than as part of the final price.
+    Small, focused computed properties make fewer assumptions about how information will be used, so require less refactoring as requirements change.
+
+### Managing State
+
+#### State should live at the highest reasonable parent component
+- State should be kept at the highest parent in the component tree that allows it to be shared among any child branches and passed down as props and mutated by listening to emitted events in its children. 
+- Generally this should be the view components which will act as the primary "container" components. In some cases the highest parent may be App.vue or in a global state management solution like Vuex or the Apollo Client Cache.
+
+#### Do not use `$root` or event buses
+- Vuex or Apollo Client Cache should be preferred for global state management instead of `this.$root` or an event bus.
+
+
+### Parent/Child Communication
+Communication between parent and child components should only happen through props (parent to child) and emitting events (child to parent).
+
+#### Do not use `this.$parent` or event busses
+- Although Vue.js supports nested components which have access to their parent context, accessing context outside your vue component goes against the idea of proper component based development. Therefore you should avoid using `this.$parent`.
+
+#### Do not pass functions down as props
+- Unlike React, in Vue you should not pass functions as props to change the state of the parent component from a child. 
+- Instead the function should live in the parent component, and the child should emit an event to the parent to trigger the function. In the parent, an event listener should listen for an emitted event from the child.  
+
+
+### Styles
+
+#### Prefer `scoped` styles
+For applications, styles in a top-level App component and in layout components may be global, but all other components' styles should always be scoped.
+Consistent scoping will ensure that your styles only apply to the components they are meant for.
+
+#### Avoid element selectors with `scoped` styles
+- Prefer class selectors over element selectors in scoped styles, because large numbers of element selectors are slow.
+>To scope styles, Vue adds a unique attribute to component elements, such as data-v-f3f3eg9. Then selectors are modified so that only matching elements with this attribute are selected (e.g. button[data-v-f3f3eg9]).<br/><br/> The problem is that large numbers of element-attribute selectors (e.g. button[data-v-f3f3eg9]) will be considerably slower than class-attribute selectors (e.g. .btn-close[data-v-f3f3eg9]), so class selectors should be preferred whenever possible.
+
+### Folder structure
+Folder should be structured into different sections of functionalities as shown below.
+#### Source
+```
+src/
+  apollo/
+  assets/
+  components/
+  layout/
+  utils/
+  views/
+  App.vue
+  main.js
+  router.js
+```
+#### Assets
+```
+assets/
+  fonts/
+  styles/
+  images/
+```
+#### Components
+```
+components/
+  app/
+    AppHeader.vue
+    AppDrawer.vue
+    AppDrawerNavigation.vue
+    ...
+  base/
+    form/
+      BaseForm.vue
+      BaseFormGroup.vue
+      BaseFormInput.vue
+      ...
+    grid/
+      BaseContainer.vue
+      BaseColumn.vue
+      BaseRow.vue
+      ...
+    input/
+      BaseButton.vue
+      ...
+  containerOne/
+    containerOneArea.vue
+    containerOneAreaInput.vue
+    ...
+  containerTwo/
+    containerTwoArea.vue
+    containerTwoAreaSearch.vue
+    ...
+```
+
+#### Each component folder should have an `index.js`
+- To speed up component development and reduce the amount import statements in components, a folder containing multiple components should contain an `index.js` which exports all of the components in that folder or its subfolders as named exports.
+
+```js
+👎 BAD 😱
+// Usage of the above components in a component without an index.js
+import MatrixTag from "@/components/matrix/MatrixTag"
+import MatrixNode from "@/components/matrix/MatrixNode"
+import MatrixElement from "@/components/matrix/MatrixElement";
+
+export default {
+  name: "MatrixPage",
+  components: {
+    MatrixTag,
+    MatrixNode,
+    MatrixElement
+  },
+```
+```js
+👍 GOOD 😊
+// Example of index.js from a component folder
+import MatrixNode from "./MatrixNode";
+import MatrixElement from "./MatrixElement";
+import MatrixTag from "./MatrixTag";
+
+export { MatrixElement, MatrixNode, MatrixTag };
+
+
+// Usage of the above components in a component
+import { MatrixTag, MatrixNode, MatrixElement } from "@/components/matrix";
+
+export default {
+  name: "MatrixPage",
+  components: {
+    MatrixTag,
+    MatrixNode,
+    MatrixElement
+  },
+```
+
+>⚠️ Note that importing from a folder such as `"@/components/matrix"` will always import the `index.js` if it exists in the folder.  As such, the whole file path is not necessary (e.g. `"@/components/matrix/index"` )
+
+#### Component folders may be broken up into subfolders
+- In the case of the base components, since there will be so many, it can be okay to break them up into subfolders. This practice should be avoided in general, but can be helpful in certain situations. 
+
+#### Each component folder or subfolder should have tests and stories folders
+- Each folder directly composed of component files should contain a tests folder and a stories folder. Webpack is configured to look in any folder inside `/src` for tests (`.spec.js`) and stories (`.stories`). 
+
+
+### Globally Registered Components
+
+#### Base components should be globally registered
+- To reduce the amount of redundant import statements of frequently used components throughout the application, base components should be globally registered. 
+- See the [`Vue documentation`](https://vuejs.org/v2/guide/components-registration.html#Global-Registration) for how this can be done using webpack. 
+
+#### Non-base components should not be globally registered
+- Global registration often isn’t ideal. For example, if you’re using a build system like Webpack, globally registering all components means that even if you stop using a component, it could still be included in your final build. This unnecessarily increases the amount of JavaScript your users have to download.
+
+#### Components from a 3rd party component library
+- In the case that a component from a 3rd party component library is needed, you may need to globally register the single component. Do not install the whole library.
+
+
 ## Software setup
 ### Linters setup
 These are some tools that can make our life easier regarding the coding standards :smiley:.
@@ -1624,13 +2039,13 @@ To fit the Wiridis coding standard, we can iinstall linters and configure VSCode
    $ npm install --save-dev eslint prettier eslint-config-google eslint-config-prettier eslint-plugin-prettier 
    ```
 
-ESLint: Linters that can help us spot coding standard mistake in our program on the `Problems` tab.
+[`ESLint`](https://eslint.org/docs/user-guide/getting-started): Linters that can help us spot coding standard mistake in our program on the `Problems` tab.
 
-Prettier: Plugin to autoformat our code to adhere to the required coding standard
+[`Prettier`](https://prettier.io/docs/en/index.html): Plugin to autoformat our code to adhere to the required coding standard
 
 Remaining modules are for configuration so that all our linters works as expected.
 
-:warn: Tips: You also need to install module for your own Javascript framework for ESLint to function properly. For VueJS, we can add `eslint-plugin-vue` as shown below:
+:warning: Tips: You also need to install module for your own Javascript framework for ESLint to function properly. For VueJS, we can add `eslint-plugin-vue` as shown below:
 
    ```
    $ npm install --save-dev eslint prettier eslint-config-google eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue
@@ -1678,10 +2093,11 @@ You can set Prettier to format your file on each save. Open the Settings pane (`
 ![VSCode settings image](format%20on%20save%20pic.png)
 
 ### Babel
-To ensure code compatibility with older browser version, we need to use `Babel` plugins to polyfill. To install this plugin:
-   1.  Install Babel as Dependency
+To ensure code compatibility with older browser version, we need to use [`Babel`](https://babeljs.io/) plugins to polyfill. To install this plugin:
+   1.  Install Babel dependencies
    ```
-   npm install --save @babel/polyfill
+   $ npm i -D webpack @babel/core babel-loader @babel/preset-env @babel/plugin-proposal-class-properties, @babel/plugin-syntax-dynamic-import webpack-cli path
+   $ npm install --save @babel/polyfill
    ```
    
    2. Create a `.babelrc` configuration file
@@ -1701,11 +2117,45 @@ Create a configuration file for ESLint with the following contents:
            "last 1 ChromeAndroid version",
            "ie 11"
          ]
-        },
-        "useBuiltIns": "usage"
-      } ]
-     ]
+        }
+      } ],
+      "@babel/preset-react"
+     ],
+     "plugins": [ "@babel/plugin-proposal-class-properties", "@babel/plugin-syntax-dynamic-import" ]
    }
+   ```
+   
+   3. Create a `webpack.config.js` configuration file
+   Create a configuration file for ESLint with the following contents:
+   ```
+   // webpack.config.js
+   const path = require( 'path' );
+   module.exports = {
+       context: __dirname,
+       entry: './src/index.js',
+       output: {
+           path: path.resolve( __dirname, 'dist' ),
+           filename: 'main.js',
+       },
+       module: {
+           rules: [
+               {
+                   test: /\.js$/,
+                   exclude: /node_modules/
+                   use: 'babel-loader',
+               }
+           ]
+       }
+   };
+   ```
+   
+   4. Add the script for webpack in `package.json`
+   Create a configuration file for ESLint with the following contents:
+   ```
+   "scripts": {
+     "dev": "webpack --watch --mode=development",
+     "prod": "webpack --mode=prodcution"
+   },
    ```
    
 We are good to go :smiley:. However, note that these Linters can only warn and format our code to a certain extend. We need to remain concious in ensuring our code adhere to the coding standards explained in this document. Happy coding! :desktop_computer:
