@@ -74,7 +74,7 @@ At the end of the document, we also include software setup for the Linters that 
 
 Quick guide to Javascript coding standard:
 
-![JS coding standard quick summary](Javascript%20coding%20standard%20cheatsheet%20diagram.JPG)
+![JS coding standard quick summary](../images/Javascript%20coding%20standard%20cheatsheet%20diagram.JPG)
 
 ### General resource
 
@@ -499,11 +499,11 @@ Example:
     👎 BAD 😱 
     /** @param {{x: {num: (number|undefined), str: (string|undefined)}}} param1 */
     function nestedTooDeeply({x: {num, str}}) {};
-    /** @param {{num: (number|undefined), str: (string|undefined)}=} param1 */
+    /** @param {{num: (number|undefined), str: (string|undefined)}} param1 */
     function nonShorthandProperty({num: a, str: b} = {}) {};
     /** @param {{a: number, b: number}} param1 */
     function computedKey({a, b, [a + b]: c}) {};
-    /** @param {{a: number, b: string}=} param1 */
+    /** @param {{a: number, b: string}} param1 */
     function nontrivialDefault({a, b} = {a: 2, b: 4}) {};
     
 
@@ -2090,7 +2090,7 @@ Create a configuration file for ESLint with the following contents:
    ```
 4. Set Prettier to format on Save (optional)
 You can set Prettier to format your file on each save. Open the Settings pane (`Ctrl + ,` or `Cmd + ,`), search for "Format" in the search field and check the box that says “Editor: Format on Save”.
-![VSCode settings image](format%20on%20save%20pic.png)
+![VSCode settings image](../images/format%20on%20save%20pic.png)
 
 ### Babel
 To ensure code compatibility with older browser version, we need to use [`Babel`](https://babeljs.io/) plugins to polyfill. To install this plugin:
