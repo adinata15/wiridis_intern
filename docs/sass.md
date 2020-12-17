@@ -41,6 +41,12 @@
 
 <a name="principles"></a>
 ## General Principles
+
+[include use BEM info, 2 spaces indentation, use em /rem, dont use colors aned capital for colors, include w3google html checker, polyfill with autoprefixer, cleancss, purify, ]
+
+Refer to PostCSS
+write scss->compile css-> clean /minify-> purify(remove unused class)-> polyfill/autoprefix -> 
+
 Strictly adhere to the agreed-upon style guide listed below. The general
 principle is to develop DRY (Don't Repeat Yourself) SCSS, built around reusable
 components and patterns.
