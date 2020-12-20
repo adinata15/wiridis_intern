@@ -52,7 +52,8 @@ CSS/SCSS
 Setups
 ---------------------------------------------
 - [Sass setup](#sass-setup)
-- [Production setup](#production setup)
+- [Production setup](#production-setup)
+
 
 # General
 ## Preliminaries
