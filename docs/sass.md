@@ -2,46 +2,60 @@
 
 ## Table of contents
 
+General
+---------------------------------------------
 - [Preliminaries](#preliminaries)
-  - [General guide](#general-guide)
   - [General resource](#general-resource)
+- [General Formatting](#general-formatting)
+  - [Indentation](#indentation)
+  - [Quotes](#quotes)
+  - [Seperation of concerns](#seperation-of-concerns)
+- [Components](#components)
+  - [Block name](#block-name)
+  - [Modifier name](#modifier-name)
+  - [Element name](#element-name)
+  
+HTML
+---------------------------------------------
+- [Doctype and metadata](#doctype-and-metadata)
+  - [Doctype](#doctype)
+  - [Document language](#document-language)
+  - [Document characterset](#document-characterset)
+  - [Viewport meta tag](#viewport-meta-tag)
+- [HTML formatting](#html-formatting)
+  - [Trailing slashes](#trailing-slashes)
+  - [Boolean attributes](#boolean-attributes)
+  - [Entity references](#entity-references)
+
+CSS/SCSS
+---------------------------------------------
 - [Specificity](#specificity)
   - [Performance](#performance)
-- [Formatting](#formatting)
-  - [Indentation](#indentation)
+- [CSS formatting](#css-formatting)
   - [Documenting](#documenting)
   - [Commenting](#commenting)
   - [Spacing](#spacing)
-  - [Quotes](#quotes)
   - [Value Declaration](#value-declaration)
   - [Declaration Order](#declaration-order)
 - [Pseudo Elements and Classes](#pseudo-elements-and-classes)
 - [Units](#units)
 - [Nesting](#nesting)
-- [@extend or @inlcude](#extend-or-include)
-- [Components](#components)
-  - [componentName](#componentName)
-  - [componentName--modifierName](#componentName--modifierName)
-  - [componentName-descendantName](#componentName-descendantName)
+- [@extend or @include](#extend-or-include)
 - [Utilities](#utilities)
   - [u-utilityName](#u-utilityName)
 - [Variables and Mixins](#variables-and-mixins)
   - [Variables](#variables)
-  - [Component / Micro app variables](#component-micro-app-variables)
   - [Maps](#maps)
-  - [colors](#colors)
-  - [z-index](#zindex)
-  - [font-weight](#fontweight)
-  - [line-height](#lineheight)
-  - [Animations](#animations)
   - [Mixins](#mixins)
-- [Polyfills](#polyfills)
-- [JavaScript](#javascript)
-- [Folder Structure](#folders)
+- [Folder Structure](#folder-structure)
+- [Final setup](#final-setup)
+    * [`Linters setup`](#linters-setup)
+    * [`Babel`](#babel)
 
+# General
 ## Preliminaries
 
-[include use BEM info, 2 spaces indentation, use em /rem, dont use colors aned capital for colors, edit performance+spacing,quotes(bad), polyfill with autoprefixer, cleancss, purify, Refer to PostCSS: write scss->compile css-> clean /minify-> purify(remove unused class)-> polyfill/autoprefix ->, fix/delete unused links ]
+[polyfill with autoprefixer, cleancss, purify, Refer to PostCSS: write scss->compile css-> clean /minify-> purify(remove unused class)-> polyfill/autoprefix ->, fix/delete unused links ]
 
 Strictly adhere to the agreed-upon style guide listed below. The general
 principle is to develop DRY (Don't Repeat Yourself) SCSS, built around reusable
@@ -53,16 +67,278 @@ components and patterns.
 - Save your complex components as patterns so they can be easily reused.
 - Build your component as a mixin which outputs _optional_ css.
 
-### General guide
-
 ### General resource
 
 Here are some resources that might be useful to get a quick understanding of the coding standard and tools that we are using:
+1. [`BEM naming convention`](https://en.bem.info/)
+2. [`Sass guidelines`](https://sass-guidelin.es/)
+3. [`MDN HTML guidelines`](https://developer.mozilla.org/en-US/docs/MDN/Guidelines/Code_guidelines/HTML)
 
-1. BEM naming convention: https://en.bem.info/
-2. Sass guidelines: https://sass-guidelin.es/
-3. MDN HTML guidelines: https://developer.mozilla.org/en-US/docs/MDN/Guidelines/Code_guidelines/HTML
+## General Formatting
 
+### Indentation
+
+- Use a soft-tab of 2 spaces.
+- Use white-space to improve readability.
+- Feel free to use indentation to show hierarchy.
+
+> 👍 GOOD 😊
+
+```css
+.component {
+  ...;
+}
+
+.component__child {
+  ...;
+}
+
+.component__childSecond {
+  ...;
+}
+```
+
+### Quotes
+Always use double quotes when available.
+
+> 👍 GOOD 😊
+> Quote attribute values in selectors
+
+```css
+input[type="checkbox"] {
+  background-image: url("/img/you.jpg");
+  font-family: "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial;
+}
+```
+
+```html
+<p class="important">Yes</p>
+```
+
+> 👎 BAD 😱
+
+```css
+input[type=checkbox] {
+  background-image: url(/img/you.jpg);
+  font-family: Helvetica Neue Light, Helvetica Neue, Helvetica, Arial;
+}
+```
+
+### Seperation of concerns
+Separate structure from presentation from behavior.
+
+Strictly keep structure (markup), presentation (styling), and behavior (scripting) apart, and try to keep the interaction between the three to an absolute minimum.
+
+That is, make sure documents and templates contain only HTML and HTML that is solely serving structural purposes. Move everything presentational into style sheets, and everything behavioral into scripts.
+
+In addition, keep the contact area as small as possible by linking as few style sheets and scripts as possible from documents and templates.
+
+Separating structure from presentation from behavior is important for maintenance reasons. It is always more expensive to change HTML documents and templates than it is to update style sheets and scripts.
+
+> 👍 GOOD 😊
+
+```html
+<!-- Recommended -->
+<!DOCTYPE html>
+<title>My first CSS-only redesign</title>
+<link rel="stylesheet" href="default.css">
+<h1>My first CSS-only redesign</h1>
+<p>
+  I’ve read about this on a few sites but today I’m actually
+  doing it: separating concerns and avoiding anything in the HTML of
+  my website that is presentational.
+</p>
+```
+
+## Components
+
+Syntax: `blockName__elementName--modifierName`
+
+This component syntax is mainly taken from [BEM/Block Element Modifier](#http://getbem.com/introduction/). However, instead of using the dashed-name, we use camelCase for the components name here.
+
+You can think of components as custom elements that enclose specific semantics,
+styling, and behaviour.
+
+**Do not choose a class name based on its visual presentation or its content.**
+
+The primary architectural division is between components and utilities:
+
+- componentName (eg. `.dropdown` or `.buttonGroup`)
+- componentName--modifierName (eg. `.dropdown--dropUp` or `.button--primary`)
+- componentName__elementName (eg. `.dropdown__item`)
+- u-utilityName (eg. `.u-textTruncate`)
+
+#### Block name
+
+The component's name must be written in camel case.
+
+```css
+.myComponent {
+  /* ... */
+}
+```
+
+#### Modifier name
+
+A component modifier is a class that modifies the presentation of the base
+component in some form. Modifier names must be written in camel case and be
+separated from the component name by **two** hyphens. The class should be included
+in the HTML _in addition_ to the base component class.
+
+```css
+/* Core button */
+.button {
+  ...;
+}
+
+.button--primary {
+  ...;
+}
+```
+
+```html
+<button class="button button--primary">...</button>
+```
+
+#### Element name
+
+A component element is a class that is attached to a descendant node of a
+component. It's responsible for applying presentation directly to the descendant
+on behalf of a particular component. Element names must be written in camel case.
+
+```html
+<article class="tweet">
+  <header class="tweet__header">
+    <img class="tweet__avatar" src="{$src}" alt="{$alt}" />
+    ...
+  </header>
+  <div class="tweet__body">...</div>
+</article>
+```
+
+You might notice that `tweet-avatar`, despite being a descendant of `tweet-header`
+does not have the class of `tweet-header-avatar`. Why? Because it doesn't necessarily
+**have** to live there. It could be adjacent to `tweet-header` and function the same
+way. Therefore, you should **only** prepend a descendant with its parent if must
+live there. Strive to keep class names as short as possible, but as long as necessary.
+
+When building a component, you'll often run into the situation where you have a
+list, group or simply require a container for some descendants. In this case, it's
+much better to follow a pattern of pluralising the container and having each
+descendant be singular. This keeps the relationship clear between descendant levels.
+
+> 👍 GOOD 😊
+
+```html
+<nav class="pagination">
+  <ul class="pagination__list">
+    <li class="pagination__listItem">...</li>
+  </ul>
+</nav>
+```
+
+```html
+<ul class="breadcrumbs">
+  <li class="breadcrumb">
+    <a class="breadcrumbLabel" href="#"></a>
+  </li>
+</ul>
+```
+
+> 👎 BAD 😱
+> Avoid verbose descendant names
+
+```html
+<nav class="pagination">
+  <ul class="pagination__pages">
+    <li class="pagination__pagesPage">...</li>
+  </ul>
+</nav>
+```
+
+```html
+<ul class="breadcrumbs">
+  <li class="breadcrumbs__breadcrumb">
+    <a class="breadcrumbs__breadcrumbLabel" href="#"></a>
+  </li>
+</ul>
+```
+
+# HTML
+These style guide are mainly taken from [MDN HTML code guidelines](https://developer.mozilla.org/en-US/docs/MDN/Guidelines/Code_guidelines).
+
+## Doctype and metadata
+### Doctype
+You should use the HTML5 doctype. It is short, easy to remember, and backwards compatible:
+
+```html
+<!DOCTYPE html>
+```
+
+### Document language
+Set the document language using the `lang` attribute on your `<html>` element:
+  
+```html
+<html lang="en-US">
+```
+
+This is good for accessibility and search engines, helps with localizing content, and reminds people to use best practices.
+
+### Document characterset
+You should also define your document's characterset like so:
+  
+```html
+<meta charset="utf-8">
+```
+
+Use UTF-8 unless you have a very good reason not to; it will cover your character needs pretty much regardless of what language you are using in your document. In addition, you should always specify the characterset as early as possible within your HTML's `<head>` block (within the first kilobyte).
+
+### Viewport meta tag
+Finally, you should always add the viewport meta tag into your HTML <head>, to give the example a better chance of working on mobile devices. You should include at least the following in your document, which can be modified later on as the need arises:
+  
+```html
+<meta name="viewport" content="width=device-width">
+```
+
+## HTML Formatting  
+### Trailing slashes
+Don't include XHTML-style trailing slashes for empty elements, as they are unnecessary and slow things down. They can also break old browsers if you are not careful (although from what we can recall, this hasn't been a problem since Netscape 4).
+
+> 👍 GOOD 😊
+```html
+<input type="text">
+<hr>
+```
+
+### Boolean attributes
+Don't write out boolean attributes in full; you can just write the attribute name to set it. For example, you can write:
+
+> 👍 GOOD 😊
+```html
+required
+```
+This is perfectly understandable and works fine. Instead of writing out the longer version with the value
+```html
+required="required"
+```
+Which is supported but not necessary.
+
+### Entity references
+Don’t use entity references unnecessarily — use the literal character wherever possible (you'll still need to escape characters like angle brackets and quote marks).
+
+> 👍 GOOD 😊
+```html
+<p>© 2018 Me</p>
+```
+
+> 👎 BAD 😱
+```html
+<p>&copy; 2018 Me</p>
+```
+
+This is fine as long as you declare a UTF-8 character set.
+
+# CSS/SCSS
 ## Specificity
 
 On large code bases, it's preferable and a tonne more maintainable if the
@@ -119,7 +395,7 @@ Overly specific selectors can also cause performance issues. Consider:
 
 ```css
 ul.user-list li span a:hover {
-  color: red;
+  color: #f00;
 }
 ```
 
@@ -128,47 +404,25 @@ selector does not match. This requires a lot of DOM walking and for large
 documents can cause a significant increase in the layout time.
 
 If we know we want to give all `a` elements inside the `.user-list` red on
-hover we can simplify this style using [BEM standards](#http://getbem.com/introduction/):
+hover we can simplify this style using [`BEM standards`](http://getbem.com/introduction/) or [`Components`](#components):
 
 ```css
 .user-list-link:hover {
-  color: red;
+  color: #f00;
 }
 ```
 
-## Formatting
+## CSS Formatting
 
 The following are some high level page formatting style rules.
 
-- Remove all trailing white-space from your file, Sublime Text can even do this upon saving.
-  - Tip: set your editor to show white-space.
+- Remove all trailing white-space from your file
+> Tip: set your editor to show white-space.
 - Leave one clear line at the bottom of your file.
-
-#### Indentation
-
-- Use a soft-tab of 2 spaces.
-- Use white-space to improve readability.
-- Feel free to use indentation to show hierarchy.
-
-> 👍 GOOD 😊
-
-```css
-.component {
-  ...;
-}
-
-.component__child {
-  ...;
-}
-
-.component__childSecond {
-  ...;
-}
-```
 
 #### Documenting
 
-Every variable, function, mixin and placeholder that is intended to be reused all over the codebase should be documented as part of the global API using [SassDoc](#http://sassdoc.com).
+Every variable, function, mixin and placeholder that is intended to be reused all over the codebase should be documented as part of the global API using [`SassDoc`](http://sassdoc.com).
 
 ```css
 /// Vertical rhythm baseline used all over the code base.
@@ -279,11 +533,10 @@ SassDoc has two major roles:
 }
 ```
 
-> 👎 BAD 😱 [make class one line]
+> 👎 BAD 😱
 
 ```css
-.content,
-.content--featured {
+.content, .content--featured {
   padding: 0;
   margin: 0;
   font-family: "Helvetica", sans-serif;
@@ -296,29 +549,7 @@ SassDoc has two major roles:
 }
 ```
 
-#### Quotes
-
-> 👍 GOOD 😊
-> Always use double quotes when available.
-> Quote attribute values in selectors
-
-```css
-input[type="checkbox"] {
-  background-image: url("/img/you.jpg");
-  font-family: "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial;
-}
-```
-
-> 👎 BAD 😱 [remove all double quotes]
-
-```css
-input[type="checkbox"] {
-  background-image: url(/img/you.jpg);
-  font-family: Helvetica Neue Light, Helvetica Neue, Helvetica, Arial;
-}
-```
-
-#### When declaring values
+#### Value Declaration
 
 - Use lower-case and shorthand hex values
 - Use unit-less line-height values
@@ -353,7 +584,7 @@ input[type="checkbox"] {
   background: #ccc;
   color: #aaaaaa;
   left: 0rem;
-  line-height: 24px;
+  line-height: 1.25;
   height: 4rem !important;
   padding: 0rem 2rem 0rem 2rem;
   top: 0rem;
@@ -461,7 +692,7 @@ For units, the rules are as follows:
 
 - Avoid all use of magic numbers. (`margin-top: 3.78rem;`)
 
-These rules are adopted based on this [guidelines](#https://medium.com/@kilgarenone/in-short-when-to-use-px-em-and-rem-b2de94e1b829)
+These rules are adopted based on this [guidelines](https://medium.com/@kilgarenone/in-short-when-to-use-px-em-and-rem-b2de94e1b829)
 
 ## Nesting
 
@@ -509,17 +740,17 @@ At its worst, this produces:
 > 👎 BAD 😱
 
 ```css
-.bc-tab-panel {
-  .panel-body {
+.bc__tabPanel {
+  .panel__body {
     position: relative;
-    & .panel-side-bar {
+    & .panel__sideBar {
       z-index: 10;
-      & .panel-side-item {
+      & .panel__sideItem {
         cursor: pointer;
-        & .panel-side-item-label {
+        & .panel__sideItemLabel {
           color: #aeaeae;
 
-          &.small-font {
+          &.smallFont {
             font-size: 1rem;
           }
         }
@@ -533,10 +764,10 @@ At it's worst, this produces:
 
 ```css
 .bc-tab-panel
-  .panel-body
-  .panel-side-bar
-  .panel-side-item
-  .panel-side-item-label.small-font {
+  .panel__body
+  .panel__sideBar
+  .panel__sideItem
+  .panel__sideItemLabel .smallFont {
   font-size: 1rem;
 }
 ```
@@ -558,127 +789,13 @@ At it's worst, this produces:
 
 .component1 {
   @extend %placeholderSelector;
-  color: red;
+  color: #f00;
 }
 
 .component2 {
   @extend %placeholderSelector;
-  color: blue;
+  color: #ff0;
 }
-```
-
-## Components
-
-Syntax: `blockName__elementName--modifierName`
-
-This component syntax is mainly taken from [BEM/Block Element Modifier](#http://getbem.com/introduction/). However, instead of using the dashed-name, we use camelCase for the components name here.
-
-You can think of components as custom elements that enclose specific semantics,
-styling, and behaviour.
-
-**Do not choose a class name based on its visual presentation or its content.**
-
-The primary architectural division is between components and utilities:
-
-- componentName (eg. `.dropdown` or `.buttonGroup`)
-- componentName--modifierName (eg. `.dropdown--dropUp` or `.button--primary`)
-- componentName__elementName (eg. `.dropdown__item`)
-- u-utilityName (eg. `.u-textTruncate`)
-
-#### Block name
-
-The component's name must be written in camel case.
-
-```css
-.myComponent {
-  /* ... */
-}
-```
-
-#### Modifier name
-
-A component modifier is a class that modifies the presentation of the base
-component in some form. Modifier names must be written in camel case and be
-separated from the component name by **two** hyphens. The class should be included
-in the HTML _in addition_ to the base component class.
-
-```css
-/* Core button */
-.button {
-  ...;
-}
-
-.button--primary {
-  ...;
-}
-```
-
-```html
-<button class="button button--primary">...</button>
-```
-
-#### Element name
-
-A component element is a class that is attached to a descendant node of a
-component. It's responsible for applying presentation directly to the descendant
-on behalf of a particular component. Element names must be written in camel case.
-
-```html
-<article class="tweet">
-  <header class="tweet__header">
-    <img class="tweet__avatar" src="{$src}" alt="{$alt}" />
-    ...
-  </header>
-  <div class="tweet__body">...</div>
-</article>
-```
-
-You might notice that `tweet-avatar`, despite being a descendant of `tweet-header`
-does not have the class of `tweet-header-avatar`. Why? Because it doesn't necessarily
-**have** to live there. It could be adjacent to `tweet-header` and function the same
-way. Therefore, you should **only** prepend a descendant with its parent if must
-live there. Strive to keep class names as short as possible, but as long as necessary.
-
-When building a component, you'll often run into the situation where you have a
-list, group or simply require a container for some descendants. In this case, it's
-much better to follow a pattern of pluralising the container and having each
-descendant be singular. This keeps the relationship clear between descendant levels.
-
-> 👍 GOOD 😊
-
-```html
-<nav class="pagination">
-  <ul class="pagination-list">
-    <li class="pagination-listItem">...</li>
-  </ul>
-</nav>
-```
-
-```html
-<ul class="breadcrumbs">
-  <li class="breadcrumb">
-    <a class="breadcrumb-label" href="#"></a>
-  </li>
-</ul>
-```
-
-> 👎 BAD 😱
-> Avoid verbose descendant names
-
-```html
-<nav class="pagination">
-  <ul class="pagination-pages">
-    <li class="pagination-pages-page">...</li>
-  </ul>
-</nav>
-```
-
-```html
-<ul class="breadcrumbs">
-  <li class="breadcrumbs-breadcrumb">
-    <a class="breadcrumbs-breadcrumb-label" href="#"></a>
-  </li>
-</ul>
 ```
 
 ## Utilities
@@ -702,7 +819,7 @@ Variables and Mixins should follow similar naming conventions.
 
 #### Variables
 
-Syntax: `<componentName>[--modifierName][-elementName]`
+Syntax: `$<componentName>[--modifierName][-elementName]`
 
 Variables should be named as such, things that can change over time.
 
@@ -789,37 +906,6 @@ Mixins follow regular camel case naming conventions and do not require namespaci
 
 - `@mixin buttonVariant;`
 - `@mixin u-textTruncate;`
-
-## Polyfills
-
-We try not to replicate CSS polyfills that auto-prefixer can
-supply in a Grunt or Gulp task. This keeps our SCSS code base lean and future proof.
-
-> 👍 GOOD 😊
-
-```css
-.button {
-  border-radius: 2.5rem;
-}
-```
-
-> 👎 BAD 😱
-> Add vendor prefixes at all.
-
-```css
-.button {
-  @include border-radius(2.5rem);
-}
-```
-
-```css
-.button {
-  -ms-border-radius: 2.5rem;
-  -o-border-radius: 2.5rem;
-  -webkit-border-radius: 2.5rem;
-  border-radius: 2.5rem;
-}
-```
 
 ## Folder Structure
 
@@ -910,3 +996,6 @@ somewhere in your component/layout code could be forgotten about and left.
 only house your app's unique code. Any repeatable component or utility that could
 be re-used across other micro apps should be flagged and a PR opened for adding
 it into the core framework.
+
+## Final setup
+
