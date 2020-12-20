@@ -1,4 +1,4 @@
-# Sass Coding Guidelines
+# HTML/CSS/SCSS Coding Guidelines
 
 ## Table of contents
 
