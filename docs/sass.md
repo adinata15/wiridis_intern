@@ -1034,10 +1034,15 @@ $ npm install -g postcss-cli
 $ npm install node-sass clean-css uncss autoprefixer
 ```
 
-postcss-cli: allow usage of posscss commands on the CLI (command line interface). This installation only need to be run once on a computer.
+postcss-cli: allow usage of posscss commands on the CLI (command line interface). 
+> This installation only need to be run once on a computer.
+
 node-sass: allow usage of sass functions on node file
+
 clean-css: minify/compress file size
+
 uncss: purify/removed unused classes 
+
 autoprefixer: polyfill code for older browser compatibility
 
 2. Add npm script to `package.json`
@@ -1086,4 +1091,5 @@ $ postcss --use autoprefixer -b 'last 2 versions' <assets/styles/main.css | cssm
 The first line to minify and purify CSS. The postCSS is to polyfill and ensure browser compatibility of the resulting CSS.
 
 We are good to go 😃. Happy coding! 🖥️.
-This production setup guide is mainly taken from https://medium.com/@ericfossas/quick-tut-sass-clean-css-uncss-3daa6581e121 and https://flaviocopes.com/postcss/.
+
+> This production setup guide is mainly taken from https://medium.com/@ericfossas/quick-tut-sass-clean-css-uncss-3daa6581e121 and https://flaviocopes.com/postcss/.
