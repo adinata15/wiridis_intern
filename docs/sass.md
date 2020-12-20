@@ -48,14 +48,14 @@ CSS/SCSS
   - [Maps](#maps)
   - [Mixins](#mixins)
 - [Folder Structure](#folder-structure)
-- [Final setup](#final-setup)
-    * [`Linters setup`](#linters-setup)
-    * [`Babel`](#babel)
+  
+Setups
+---------------------------------------------
+- [Sass setup](#sass-setup)
+- [Production setup](#production setup)
 
 # General
 ## Preliminaries
-
-[polyfill with autoprefixer, cleancss, purify, Refer to PostCSS: write scss->compile css-> clean /minify-> purify(remove unused class)-> polyfill/autoprefix ->, fix/delete unused links ]
 
 Strictly adhere to the agreed-upon style guide listed below. The general
 principle is to develop DRY (Don't Repeat Yourself) SCSS, built around reusable
@@ -997,5 +997,92 @@ only house your app's unique code. Any repeatable component or utility that coul
 be re-used across other micro apps should be flagged and a PR opened for adding
 it into the core framework.
 
-## Final setup
+# Setup
+## Sass setup
+As Sass cannot be included inside the HTML file, we need to convert our `.scss` and `.sass` file to css file first using the following steps:
 
+1. Install Sass dependencies
+```
+$ npm install -g sass
+```
+
+This is to allow sass commands to be used in our VScode (this step only need to be done once on a computer).
+
+2. Create directory for sass and css files
+```
+.
+├── scss
+|   ├── style.scss
+├── css
+|   ├── style.css
+```
+
+3. Allow sass to watch over `.sass` files and compile them to `.css` file
+```
+sass --watch scss/*.scss css/style.css 
+```
+
+This will allow css to keep updated/formatted when `.sass` files are saved. 
+> Note: do not make changes on the `.css` file as all changes will be nullified on each save
+
+## Production setup
+Before sending our code to production built, we need to do several steps to make our file more compatible and well-packed with the following steps:
+1. Install required dependencies
+```
+$ npm install -g postcss-cli
+$ npm install node-sass clean-css uncss autoprefixer
+```
+
+postcss-cli: allow usage of posscss commands on the CLI (command line interface). This installation only need to be run once on a computer.
+node-sass: allow usage of sass functions on node file
+clean-css: minify/compress file size
+uncss: purify/removed unused classes 
+autoprefixer: polyfill code for older browser compatibility
+
+2. Add npm script to `package.json`
+```
+"scripts": { 
+  "css-build":"css.js" 
+}
+```
+
+3. Create the file `css.js` and add the following to it:
+```js
+/* import all 3 libraries and file system for writing the final file */
+var sass = require('node-sass');
+var CleanCSS = require('clean-css');
+var uncss = require('uncss');
+var fs = require('fs');
+
+/* compile scss files */
+// you need to set 'filename' to a string of the path to your main scss file
+sass.render({file: filename}, function(err, result) { 
+  if (err) {
+    console.log(err); 
+    return;  
+  }
+  /* minify results */
+  var output = new CleanCSS({}).minify(result);
+
+  /* remove unused css */
+  // you need to set 'files' to an array of strings, 
+  // each string being a relative path or url to an HTML file
+  uncss(files, {}, function (error, output) {
+    fs.writeFile("readyForProduction.css", output, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+  });
+});
+```
+
+4. Run npm script on CLI
+```
+$ npm run css-build
+$ postcss --use autoprefixer -b 'last 2 versions' <assets/styles/main.css | cssmin > dist/main.css
+```
+The first line to minify and purify CSS. The postCSS is to polyfill and ensure browser compatibility of the resulting CSS.
+
+We are good to go 😃. Happy coding! 🖥️.
+This production setup guide is mainly taken from https://medium.com/@ericfossas/quick-tut-sass-clean-css-uncss-3daa6581e121 and https://flaviocopes.com/postcss/.
