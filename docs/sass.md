@@ -1,5 +1,4 @@
 # HTML/CSS/SCSS Coding Guidelines
-
 ## Table of contents
 
 General
@@ -169,7 +168,7 @@ The primary architectural division is between components and utilities:
 - componentName__elementName (eg. `.dropdown__item`)
 - u-utilityName (eg. `.u-textTruncate`)
 
-#### Block name
+### Block name
 
 The component's name must be written in camel case.
 
@@ -179,7 +178,7 @@ The component's name must be written in camel case.
 }
 ```
 
-#### Modifier name
+### Modifier name
 
 A component modifier is a class that modifies the presentation of the base
 component in some form. Modifier names must be written in camel case and be
@@ -201,7 +200,7 @@ in the HTML _in addition_ to the base component class.
 <button class="button button--primary">...</button>
 ```
 
-#### Element name
+### Element name
 
 A component element is a class that is attached to a descendant node of a
 component. It's responsible for applying presentation directly to the descendant
@@ -390,7 +389,7 @@ div.container {
 }
 ```
 
-#### Performance
+### Performance
 
 Overly specific selectors can also cause performance issues. Consider:
 
@@ -421,7 +420,7 @@ The following are some high level page formatting style rules.
 > Tip: set your editor to show white-space.
 - Leave one clear line at the bottom of your file.
 
-#### Documenting
+### Documenting
 
 Every variable, function, mixin and placeholder that is intended to be reused all over the codebase should be documented as part of the global API using [`SassDoc`](http://sassdoc.com).
 
@@ -475,7 +474,7 @@ SassDoc has two major roles:
 }
 ```
 
-#### Commenting
+### Commenting
 
 - Separate your code into logical sections using standard comment blocks.
 - Leave one clear line under your section comments.
@@ -505,7 +504,7 @@ SassDoc has two major roles:
 }
 ```
 
-#### Spacing
+### Spacing
 
 - CSS rules should be comma separated but live on new lines.
 - Include a single space before the opening brace of a rule-set.
@@ -550,7 +549,7 @@ SassDoc has two major roles:
 }
 ```
 
-#### Value Declaration
+### Value Declaration
 
 - Use lower-case and shorthand hex values
 - Use unit-less line-height values
@@ -592,7 +591,7 @@ SassDoc has two major roles:
 }
 ```
 
-#### Declaration order
+### Declaration order
 
 There are a millions opinions and thoughts on logical ordering and grouping.
 Don't force someone to learn your opinion, ordering doesn't matter, consistency
@@ -679,11 +678,15 @@ For units, the rules are as follows:
   - Positioning (`top`, `right`, `bottom`, `left`)
   - Dimensions (Such as `width`, `height`, `margin`, `padding`)
   - Font size
+- Use `em` units as primary unit type. This includes:
+  - Media query (`min-width: 20em`)
 - Use `px` units as primary unit type for the following properties:
   - Border widths (`border: 1px solid #bada55;`)
+  - Border radius (`border-radius: 15px 50px 30px 5px;`)
 - Use `%` units only if necessary, where `rem` will not suffice:
   - Positioning (`top`, `right`, `bottom`, `left`)
   - Dimensions (`width`, `height`)
+  
 - Line-height should be kept unit-less. If you find you're using a line-height
   with a set unit type, try to think of alternative ways to achieve the same outcome.
   If it's a unique case which requires a specific `px` or `rem` unit, outline the
@@ -808,7 +811,7 @@ and utilities can be used alongside component classes.
 Utility classes should be used sparingly, lean towards component level styling
 to make for as reusable HTML patterns as possible.
 
-#### u-utilityName
+### u-utilityName
 
 Syntax: `u-<utilityName>`
 
@@ -818,7 +821,7 @@ Utilities must use a camel case name, prefixed with a `u` namespace.
 
 Variables and Mixins should follow similar naming conventions.
 
-#### Variables
+### Variables
 
 Syntax: `$<componentName>[--modifierName][-elementName]`
 
@@ -844,7 +847,7 @@ $color-blue: #00ffee;
 $color-lightBlue: #eeff00;
 ```
 
-#### Maps
+### Maps
 
 Variable maps with a simple getter mixin, can help simplify your variable names
 when calling them, and help better group variables together using their
@@ -901,7 +904,7 @@ h3 {
 **Every variable used in the core architecture must be based off the global
 variables.**
 
-#### Mixins
+### Mixins
 
 Mixins follow regular camel case naming conventions and do not require namespacing. If you are creating a mixin for a utility, it will need to match the utility name (including `u` namespacing).
 
@@ -910,7 +913,7 @@ Mixins follow regular camel case naming conventions and do not require namespaci
 
 ## Folder Structure
 
-#### General principle
+### General principle
 
 The Sass folder structure we're proposing, will have two slight differences
 between the core framework and micro apps, however the bulk of the structure is
@@ -919,72 +922,118 @@ identical between the two.
 The idea is to have the least amount of folders as possible, but as many as we
 need to define clear, structured patterns in your Sass.
 
-#### Core Folder Structure
+### Core Folder Structure
 
 ```
 .
-├── sass
-|   ├── settings/
-|   └── tools/
-|   └── vendor/
-|   └── components/
-|   └── utilities/
+sass/
+|
+|– abstracts/
+|   |– _variables.scss    # Sass Variables
+|   |– _functions.scss    # Sass Functions
+|   |– _mixins.scss       # Sass Mixins
+|   |– _placeholders.scss # Sass Placeholders
+|
+|– base/
+|   |– _reset.scss        # Reset/normalize
+|   |– _typography.scss   # Typography rules
+|   …                     # Etc.
+|
+|– components/
+|   |– _buttons.scss      # Buttons
+|   |– _carousel.scss     # Carousel
+|   |– _cover.scss        # Cover
+|   |– _dropdown.scss     # Dropdown
+|   …                     # Etc.
+|
+|– layout/
+|   |– _navigation.scss   # Navigation
+|   |– _grid.scss         # Grid system
+|   |– _header.scss       # Header
+|   |– _footer.scss       # Footer
+|   |– _sidebar.scss      # Sidebar
+|   |– _forms.scss        # Forms
+|   …                     # Etc.
+|
+|– pages/
+|   |– _home.scss         # Home specific styles
+|   |– _contact.scss      # Contact specific styles
+|   …                     # Etc.
+|
+|– themes/
+|   |– _theme.scss        # Default theme
+|   |– _admin.scss        # Admin theme
+|   …                     # Etc.
+|
+|– vendors/
+|   |– _bootstrap.scss    # Bootstrap
+|   |– _jquery-ui.scss    # jQuery UI
+|   …                     # Etc.
+|
+|– shame/
+|   |– _hack.scss         # Hacks
+|   …                     # Etc.
+|
+`– main.scss   
 ```
+**/abstracts or /utilities:**
+The abstracts/ folder gathers all Sass tools and helpers used across the project. Every global variable, function, mixin and placeholder should be put in here. An example being, truncatedText. You can utilise it by applying the class
+`.u-truncatedText` or by applying a mixin, `@include truncatedText;`.
 
-**/settings:** Contains all of your SCSS variables for your framework. Within
-this folder is 1 primary file `_settings.scss`, which imports all other variable
-files that have been broken into logical files such as `_colors.scss`,
-`_typography.scss`, `_z-index.scss` and your chosen frameworks variables, for
-example `_foundation.scss`.
+The rule of thumb for this folder is that it should not output a single line of CSS when compiled on its own. These are nothing but Sass helpers.
 
-**/tools:** Contains all of your Sass mixins. Within this folder is 1 primary
-file `_tools.scss`, which imports all other mixin files that have been broken into
-logical files. No framework mixins should appear in this folder as they can be
-consumed from their own respective `/vendor` or `/components` folder.
+- _variables.scss
+- _mixins.scss
+- _functions.scss
+- _placeholders.scss
 
-**/vendor:** Contains all of your vendor files, such as normalize, bootstrap,
-foundation, animate.css, etc. All readily consumable third party files belong
-here, and can be imported in the framework base file as required. No file in
-the /vendor folder should ever be modified.
+When working on a very large project with a lot of abstract utilities, it might be interesting to group them by topic rather than type, for instance typography (`_typography.scss`), theming (`_theming.scss`), etc. Each file contains all the related helpers: variables, functions, mixins and placeholders. Doing so can make the code easier to browse and maintain, especially when files are getting very long.
 
-**/components:** Contains all of your components. This folder will make up the
+**/themes:** On large sites and applications, it is not unusual to have different themes. There are certainly different ways of dealing with themes but I personally like having them all in a `themes/` folder.
+
+> Note: This is very project-specific and is likely to be non-existent on many projects.
+
+**/pages:** If you have page-specific styles, it is better to put them in a `pages/` folder, in a file named after the page. For instance, it’s not uncommon to have very specific styles for the home page hence the need for a `_home.scss` file in `pages/`.
+
+> Note: Depending on your deployment process, these files could be called on their own to avoid merging them with the others in the resulting stylesheet. It is really up to you.
+
+**/components or /modules:** Contains all of your components. This folder will make up the
 vast majority of your compiled CSS. All custom components simply live inside
 this folder, for example `/components/component/_component.scss`. It also contains
 the consumed version of your chosen /vendor framework's components, which will be
 reworked to adhere to the Naming Conventions and Style Guide. They will live
 inside a subfolder of the framework's name, for example `/components/foundation/`.
 
-**/utilities:** Contains all CSS snippets which can be applied to your HTML for
-quick prototyping, or a case by case basis where a unique, yet repeatable style
-is required. Every utility found within this folder will have both a class and a
-mixin. An example being, truncatedText. You can utilise it by applying the class
-`.u-truncatedText` or by applying a mixin, `@include truncatedText;`.
+**/layout or /partials:** Contains everything that takes part in laying out the site or application. This folder could have stylesheets for the main parts of the site (header, footer, navigation, sidebar…), the grid system or even CSS styles for all the forms.
 
-#### Micro App Folder Structure
+**/base:** Contains what we might call the boilerplate code for the project. In there, you might find the reset file, some typographic rules, and probably a stylesheet defining some standard styles for commonly used HTML elements (that I like to call `_base.scss`).
 
-```
-.
-├── sass
-|   ├── settings/
-|   └── tools/
-|   └── vendor/
-|   └── layouts/
-|   └── components/
-|   └── utilities/
-|   └── shame/
-```
+> Note: If your project uses a lot of CSS animations, you might consider adding an `\_animations.scss` file in there containing the `@keyframes` definitions of all your animations. If you only use a them sporadically, let them live along the selectors that use them.
 
-There are only two minor differences in a micro app, when compared to the core
-framework. Firstly you'll notice that the /framework folder has been replaced by
-a /layouts folder, as well as the addition of the /shame folder.
+**/vendors:** Contains all of your vendor files, such as normalize, bootstrap,
+foundation, animate.css, etc. All readily consumable third party files belong
+here, and can be imported in the framework base file as required. No file in
+the /vendor folder should ever be modified.
 
-**/layouts:** Contains your micro app "layouts" and page specific styling.
-Essentially creating the wrapping sections and grids for your app, where the
-core framework's components will live inside. For example, a layout file could
-potentially be your micro app's navigation. It is important to note that the
-styling for individual navigation items and all other inner components styling
-do not live in the layout file. There purpose is purely for the containing
-elements that set up your app.
+**/main.scss:** The main file (usually labelled `main.scss`) should be the only Sass file 
+from the whole code base not to begin with an underscore. This file should not contain anything but `@use` and comments.
+
+Files should be imported according to the folder they live in, one after the other in the following order:
+
+1. abstracts/
+2. vendors/
+3. base/
+4. layout/
+5. components/
+6. pages/
+7. themes/
+
+In order to preserve readability, the main file should respect these guidelines:
+- one file per `@use`;
+- one `@use` per line;
+- no new line between two imports from the same folder;
+- a new line after the last import from a folder;
+- file extensions and leading underscores omitted.
 
 **/shame:** This interestingly named folder has one goal: to remain empty. It's
 purpose is the place for all of those hot fixes or quick hacks in throwing
