@@ -1079,66 +1079,119 @@ This will allow css to keep updated/formatted when `.sass` files are saved.
 Before sending our code to production built, we need to do several steps to make our file more compatible and well-packed with the following steps:
 1. Install required dependencies
 ```
-$ npm install -g postcss-cli
-$ npm install node-sass clean-css uncss autoprefixer
+$ npm install -g postcss-loader
+$ npm i purgecss-webpack-plugin csso-loader stylelint-webpack-plugin stylelint mini-css-extract-plugin -D
+$ npm install node-sass autoprefixer
 ```
 
-postcss-cli: allow usage of posscss commands on the CLI (command line interface). 
+postcss-loader: allow usage of posscss plugins. 
 > This installation only need to be run once on a computer.
 
-node-sass: allow usage of sass functions on node file
+[`stylelint`](https://stylelint.io/): linters for css
 
-clean-css: minify/compress file size
+[`node-sass`](https://www.npmjs.com/package/node-sass): allow usage of sass functions on node file
 
-uncss: purify/removed unused classes 
+[`csso-loader`](https://github.com/sandark7/csso-loader): minify/compress file size
 
-autoprefixer: polyfill code for older browser compatibility
+[`mini-css-extract-plugin`](https://webpack.js.org/plugins/mini-css-extract-plugin/): extract CSS to seperate files
 
-2. Add npm script to `package.json`
+[`purge-css`](https://www.npmjs.com/package/purgecss-webpack-plugin): purify/removed unused classes 
+
+[`autoprefixer`](https://github.com/postcss/autoprefixer): polyfill code for older browser compatibility
+
+2. Configure to `package.json`
+Add the following to `package.json`:
 ```
-"scripts": { 
-  "css-build":"css.js" 
+"browserslist": [ 
+  "> 1%",
+  "ie > 9"
+]
+```
+
+3. Create and configure `webpack.config.js` as follows:
+```js
+const path = require("path");
+const glob = require("glob");
+const autoprefixer = require("autoprefixer");
+const StylelintPlugin = require("stylelint-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const PurgecssPlugin = require("purgecss-webpack-plugin");
+
+const PATHS = {
+  src: path.join(__dirname, "src"),
+};
+
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    filename: "bundle.js",
+    path: path.join(__dirname, "dist"),
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: "styles",
+          test: /\.css$/,
+          chunks: "all",
+          enforce: true,
+        },
+      },
+    },
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(sass|scss)$/,
+        use: [
+          "'css-loader!csso-loader'",
+          {
+            loader: "postcss-loader",
+            options: {
+              plugins: () => [autoprefixer()],
+            },
+          },
+          "sass-loader",
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: ["css-loader"],
+      },
+    ],
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+    }),
+    new PurgecssPlugin({
+      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+    }),
+    new StylelintPlugin({
+      configFile: ".stylelintrc", // if your config is in a non-standard place
+      files: "src/**/*.css", // location of your CSS files
+      fix: true, // if you want to auto-fix some of the basic rules
+    }),
+  ],
+};
+```
+
+4. Create and configure `stylelintrc.json` as follows:
+```json
+{
+  "rules": {
+    "comment-no-empty",
+    "comment-empty-line-before": [
+      "always",
+      {
+        "ignore": ["stylelint-commands", "after-comment"]
+      }
+    ],
+    "indentation": 2,
+    "max-empty-lines": 2,
+    "unit-allowed-list": ["em", "rem", "%", "px"]
+  }
 }
 ```
 
-3. Create the file `css.js` and add the following to it:
-```js
-/* import all 3 libraries and file system for writing the final file */
-var sass = require('node-sass');
-var CleanCSS = require('clean-css');
-var uncss = require('uncss');
-var fs = require('fs');
-
-/* compile scss files */
-// you need to set 'filename' to a string of the path to your main scss file
-sass.render({file: filename}, function(err, result) { 
-  if (err) {
-    console.log(err); 
-    return;  
-  }
-  /* minify results */
-  var output = new CleanCSS({}).minify(result);
-
-  /* remove unused css */
-  // you need to set 'files' to an array of strings, 
-  // each string being a relative path or url to an HTML file
-  uncss(files, {}, function (error, output) {
-    fs.writeFile("readyForProduction.css", output, function(err) {
-        if (err) {
-            console.log(err);
-        }
-    });
-  });
-});
-```
-
-4. Run npm script on CLI
-```
-$ npm run css-build
-$ postcss --use autoprefixer -b 'last 2 versions' <assets/styles/main.css | cssmin > dist/main.css
-```
-The first line to minify and purify CSS. The postCSS is to polyfill and ensure browser compatibility of the resulting CSS.
-
 We are good to go 😃. Happy coding! 🖥️.
-
-> This production setup guide is mainly taken from https://medium.com/@ericfossas/quick-tut-sass-clean-css-uncss-3daa6581e121 and https://flaviocopes.com/postcss/.
