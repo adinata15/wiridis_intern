@@ -1079,12 +1079,11 @@ This will allow css to keep updated/formatted when `.sass` files are saved.
 Before sending our code to production built, we need to do several steps to make our file more compatible and well-packed with the following steps:
 1. Install required dependencies
 ```
-$ npm install -g postcss-loader
-$ npm i purgecss-webpack-plugin csso-loader stylelint-webpack-plugin stylelint mini-css-extract-plugin -D
-$ npm install node-sass autoprefixer
+$ npm i postcss postcss-loader purgecss-webpack-plugin csso-loader stylelint-webpack-plugin stylelint mini-css-extract-plugin -D
+$ npm install node-sass autoprefixer colorguard
 ```
 
-postcss-loader: allow usage of posscss plugins. 
+[`postcss-loader`](https://webpack.js.org/loaders/postcss-loader/): allow usage of posscss plugins. 
 > This installation only need to be run once on a computer.
 
 [`stylelint`](https://stylelint.io/): linters for css
@@ -1099,9 +1098,10 @@ postcss-loader: allow usage of posscss plugins.
 
 [`autoprefixer`](https://github.com/postcss/autoprefixer): polyfill code for older browser compatibility
 
-2. Configure to `package.json`
-Add the following to `package.json`:
-```
+[`colorguard`](https://github.com/SlexAxton/css-colorguard): prevent similar shade of colors to be used
+
+2. Add the following to `package.json`:
+```json
 "browserslist": [ 
   "> 1%",
   "ie > 9"
@@ -1113,6 +1113,7 @@ Add the following to `package.json`:
 const path = require("path");
 const glob = require("glob");
 const autoprefixer = require("autoprefixer");
+cosnt colorguard  = require("colorguard ");
 const StylelintPlugin = require("stylelint-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const PurgecssPlugin = require("purgecss-webpack-plugin");
@@ -1148,7 +1149,7 @@ module.exports = {
           {
             loader: "postcss-loader",
             options: {
-              plugins: () => [autoprefixer()],
+              plugins: () => [autoprefixer(), colorguard (),],
             },
           },
           "sass-loader",
