@@ -695,6 +695,8 @@ For units, the rules are as follows:
 - Use `%` units only if necessary, where `rem` will not suffice:
   - Positioning (`top`, `right`, `bottom`, `left`)
   - Dimensions (`width`, `height`)
+- Use `vh` or `vw` units as unit type only if necessary. This includes:
+  - Dimensions (Such as `width`, `height`, `margin`, `padding`)
   
 - Line-height should be kept unit-less. If you find you're using a line-height
   with a set unit type, try to think of alternative ways to achieve the same outcome.
@@ -1102,10 +1104,12 @@ $ npm install node-sass autoprefixer colorguard
 [`node-sass`](https://www.npmjs.com/package/node-sass): allow usage of sass functions on node file
 
 [`csso-loader`](https://github.com/sandark7/csso-loader): minify/compress file size
+> Note: This is recommended compared to other minifiers as `csso` is shown to be the one which perform generally well in all aspects, shown [`here`](https://goalsmashers.github.io/css-minification-benchmark/)
 
 [`mini-css-extract-plugin`](https://webpack.js.org/plugins/mini-css-extract-plugin/): extract CSS to seperate files
 
 [`purge-css`](https://www.npmjs.com/package/purgecss-webpack-plugin): purify/removed unused classes 
+> Note: This is recommended compared to other purifiers as explained [`here`](https://purgecss.com/comparison.html)
 
 [`autoprefixer`](https://github.com/postcss/autoprefixer): polyfill code for older browser compatibility
 
@@ -1118,8 +1122,12 @@ $ npm install node-sass autoprefixer colorguard
   "ie > 9"
 ]
 ```
+> This setup is mainly based on [`Google settings`](https://github.com/davidhund/browserslist-config)
 
 3. Create and configure `webpack.config.js` as follows:
+
+Webpack will be used here as a bundler as explained [`here`](https://blog.logrocket.com/benchmarking-bundlers-2020-rollup-parcel-webpack/)
+
 ```js
 const path = require("path");
 const glob = require("glob");
@@ -1205,7 +1213,7 @@ module.exports = {
     ],
     "indentation": 2,
     "max-empty-lines": 2,
-    "unit-allowed-list": ["em", "rem", "%", "px"]
+    "unit-allowed-list": ["em", "rem", "%", "px", "vh", "vw"]
   },
 }
 ```
