@@ -1079,7 +1079,7 @@ This will allow css to keep updated/formatted when `.sass` files are saved.
 Before sending our code to production built, we need to do several steps to make our file more compatible and well-packed with the following steps:
 1. Install required dependencies
 ```
-$ npm i postcss postcss-loader purgecss-webpack-plugin csso-loader stylelint-webpack-plugin stylelint mini-css-extract-plugin -D
+$ npm i postcss postcss-loader purgecss-webpack-plugin csso-loader stylelint-webpack-plugin stylelint prettier-stylelint mini-css-extract-plugin -D
 $ npm install node-sass autoprefixer colorguard
 ```
 
@@ -1087,6 +1087,8 @@ $ npm install node-sass autoprefixer colorguard
 > This installation only need to be run once on a computer.
 
 [`stylelint`](https://stylelint.io/): linters for css
+
+[`prettier`](https://github.com/hugomrdias/prettier-stylelint): code formatter
 
 [`node-sass`](https://www.npmjs.com/package/node-sass): allow usage of sass functions on node file
 
@@ -1180,6 +1182,10 @@ module.exports = {
 4. Create and configure `stylelintrc.json` as follows:
 ```json
 {
+  "extends": [
+      "stylelint-config-idiomatic-order",
+      "./node_modules/prettier-stylelint/config.js"
+  ],
   "rules": {
     "comment-no-empty": true,
     "comment-empty-line-before": [
@@ -1191,7 +1197,7 @@ module.exports = {
     "indentation": 2,
     "max-empty-lines": 2,
     "unit-allowed-list": ["em", "rem", "%", "px"]
-  }
+  },
 }
 ```
 
