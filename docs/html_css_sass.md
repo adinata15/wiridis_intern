@@ -1181,7 +1181,7 @@ module.exports = {
 ```json
 {
   "rules": {
-    "comment-no-empty",
+    "comment-no-empty": true,
     "comment-empty-line-before": [
       "always",
       {
