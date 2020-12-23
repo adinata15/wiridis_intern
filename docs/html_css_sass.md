@@ -5,6 +5,7 @@ General
 ---------------------------------------------
 - [Preliminaries](#preliminaries)
   - [General resource](#general-resource)
+  - [Supplementary resource](#supplementary-resource)
 - [General Formatting](#general-formatting)
   - [Indentation](#indentation)
   - [Quotes](#quotes)
@@ -73,6 +74,14 @@ Here are some resources that might be useful to get a quick understanding of the
 1. [`BEM naming convention`](https://en.bem.info/)
 2. [`Sass guidelines`](https://sass-guidelin.es/)
 3. [`MDN HTML guidelines`](https://developer.mozilla.org/en-US/docs/MDN/Guidelines/Code_guidelines/HTML)
+
+### Supplementary resource
+
+Here are some interesting resources that might be useful for further understandings:
+1. [`Google style guide`](https://google.github.io/styleguide/htmlcssguide.html)
+2. [`Good website design`](https://www.awwwards.com/websites/css3/)
+3. [`PostCSS parts : list PostCSS plugins by category`](https://www.postcss.parts/)
+4. [`Npm module comparator : provide general sense for commonly used dependencoes`](https://www.npmtrends.com/)
 
 ## General Formatting
 
